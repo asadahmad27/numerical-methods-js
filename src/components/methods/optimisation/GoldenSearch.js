@@ -1,5 +1,5 @@
-import {isValidMath, mathjsKeywords, formatLatex} from "../../utils";
-import React, {useState, useEffect} from "react";
+import { isValidMath, mathjsKeywords, formatLatex } from "../../utils";
+import React, { useState, useEffect } from "react";
 import Header from "../../header/Header";
 import Graph from "../../Graph";
 import * as Desmos from 'desmos';
@@ -23,7 +23,7 @@ import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fab from '@material-ui/core/Fab';
 import HelpIcon from '@material-ui/icons/Help';
-import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps} from "react-joyride";
+import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps } from "react-joyride";
 import Collapse from '@material-ui/core/Collapse';
 import { Fade, Zoom, Slide } from "react-awesome-reveal";
 import { useTheme } from '@material-ui/core/styles';
@@ -35,7 +35,7 @@ const TOUR_STEPS: JoyrideStep[] = [
         target: ".function-input",
         title: "Function",
         content:
-        "Type a math function which only has the variable x. cos(x), sin(x) and e^x are supported.",
+            "Type a math function which only has the variable x. cos(x), sin(x) and e^x are supported.",
         disableBeacon: true,
     },
     {
@@ -66,36 +66,36 @@ const TOUR_STEPS: JoyrideStep[] = [
 
 // Styles
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.primary,
-    margin: theme.spacing(1),
-  },
-  container: {
-    "& > *": {
-        margin: theme.spacing(1)
-    }
-  },
-  card: {
-    margin: theme.spacing(0.5),
-  },
-  cardContent: {
-    overflow: 'auto',
-    "& > *": {
-        margin: theme.spacing(0.5)
-    }
-  },
-  fab: {
-    position: 'fixed',
-    bottom: theme.spacing(4),
-    right: theme.spacing(2),
-  },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.primary,
+        margin: theme.spacing(1),
+    },
+    container: {
+        "& > *": {
+            margin: theme.spacing(1)
+        }
+    },
+    card: {
+        margin: theme.spacing(0.5),
+    },
+    cardContent: {
+        overflow: 'auto',
+        "& > *": {
+            margin: theme.spacing(0.5)
+        }
+    },
+    fab: {
+        position: 'fixed',
+        bottom: theme.spacing(4),
+        right: theme.spacing(2),
+    },
 }));
 
 addStyles(); // inserts the required css to the <head> block for mathquill
 
-function OptiGoldenSearch({methodName, markdown}) {
+function OptiGoldenSearch({ methodName, markdown }) {
     useEffect(() => {
         // Set webpage title
         document.title = methodName;
@@ -120,9 +120,9 @@ function OptiGoldenSearch({methodName, markdown}) {
             }
         });
     }
-    catch(e) {
+    catch (e) {
         functionError = true;
-        functionErrorText = e === "variableName" ? "Only x variable is allowed." :  "Invalid equation!";
+        functionErrorText = e === "variableName" ? "Only x variable is allowed." : "Invalid equation!";
     }
 
     // Interval
@@ -173,8 +173,8 @@ function OptiGoldenSearch({methodName, markdown}) {
         solve = true;
         let i = 0;
         while (true) {
-            let oldLowerX = (i === 0) ? lowerX: results[i - 1].newLowerX;
-            let oldUpperX = (i === 0) ? upperX: results[i - 1].newUpperX;
+            let oldLowerX = (i === 0) ? lowerX : results[i - 1].newLowerX;
+            let oldUpperX = (i === 0) ? upperX : results[i - 1].newUpperX;
             const d = goldenRatio * (oldUpperX - oldLowerX);
             let aX = oldUpperX - d;
             let bX = oldLowerX + d;
@@ -182,8 +182,8 @@ function OptiGoldenSearch({methodName, markdown}) {
             let newUpperX = bX;
             let lowerFuncResult, upperFuncResult;
             try {
-                lowerFuncResult = functionValue.evaluate({x : aX});
-                upperFuncResult = functionValue.evaluate({x : bX});
+                lowerFuncResult = functionValue.evaluate({ x: aX });
+                upperFuncResult = functionValue.evaluate({ x: bX });
             }
             catch {
                 hasError = true;
@@ -200,7 +200,7 @@ function OptiGoldenSearch({methodName, markdown}) {
             }
             // Check if interval is lower than threshold
             const interval = Math.abs(newUpperX - newLowerX);
-            
+
             results.push({
                 oldLowerX,
                 newLowerX,
@@ -219,7 +219,7 @@ function OptiGoldenSearch({methodName, markdown}) {
                 exceedIterErrorText = "Exceeded 1000 iterations!";
                 break;
             }
-            if (interval < intervalThreshold){
+            if (interval < intervalThreshold) {
                 break;
             }
         }
@@ -237,128 +237,124 @@ function OptiGoldenSearch({methodName, markdown}) {
         }
     };
 
-    let params = {functionLatex, intervalThreshold, goldenRatio, iterations, exceedIterError, exceedIterErrorText, results};
-    
+    let params = { functionLatex, intervalThreshold, goldenRatio, iterations, exceedIterError, exceedIterErrorText, results };
+
     return (
         <>
             <Header methodName={methodName} markdown={markdown} />
             <Paper className={styleClasses.paper}>
                 <Container className={styleClasses.container}>
-                <Zoom duration={500} triggerOnce cascade>
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item className="function-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Function, f(x):
-                                    </Typography>
-                                    <EditableMathField
-                                        disabled={false}
-                                        latex={functionLatex}
-                                        onChange={(mathField) => {
-                                            setFunctionText(mathField.text());
-                                            setFunctionLatex(mathField.latex());
-                                        }}
-                                        mathquillDidMount={(mathField) => {
-                                            setFunctionText(mathField.text())
-                                        }}
-                                    />
-                                    <Collapse in={functionError}>
-                                        <Alert severity="error">
-                                            {functionErrorText}
-                                        </Alert>
-                                    </Collapse>
-                                </CardContent>
-                            </Card>
+                    <Zoom duration={500} triggerOnce cascade>
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item className="function-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Function, f(x):
+                                        </Typography>
+                                        <EditableMathField
+                                            disabled={false}
+                                            latex={functionLatex}
+                                            onChange={(mathField) => {
+                                                setFunctionText(mathField.text());
+                                                setFunctionLatex(mathField.latex());
+                                            }}
+                                            mathquillDidMount={(mathField) => {
+                                                setFunctionText(mathField.text())
+                                            }}
+                                        />
+                                        <Collapse in={functionError}>
+                                            <Alert severity="error">
+                                                {functionErrorText}
+                                            </Alert>
+                                        </Collapse>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                    </Grid>
 
-                    <Grid className="interval-input" container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item>
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Lower x value:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setLowerX(parseFloat(event.target.value))}
-                                        error={intervalError || lowerXError}
-                                        label={intervalError || lowerXError ?"Error":""}
-                                        defaultValue={lowerX.toString()}
-                                        helperText={lowerXErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
+                        <Grid className="interval-input" container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item>
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Lower x value:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setLowerX(parseFloat(event.target.value))}
+                                            error={intervalError || lowerXError}
+                                            label={intervalError || lowerXError ? "Error" : ""}
+                                            defaultValue={lowerX.toString()}
+                                            helperText={lowerXErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid xs item>
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Upper x value:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setUpperX(parseFloat(event.target.value))}
+                                            error={intervalError || upperXError}
+                                            label={intervalError || upperXError ? "Error" : ""}
+                                            defaultValue={upperX.toString()}
+                                            helperText={upperXErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                        <Grid xs item>
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Upper x value:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setUpperX(parseFloat(event.target.value))}
-                                        error={intervalError || upperXError}
-                                        label={intervalError || upperXError ?"Error":""}
-                                        defaultValue={upperX.toString()}
-                                        helperText={upperXErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item className="intervalThreshold-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Interval threshold:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setIntervalThreshold(parseFloat(event.target.value))}
+                                            error={thresholdError}
+                                            label={thresholdError ? "Error" : ""}
+                                            defaultValue={intervalThreshold.toString()}
+                                            helperText={thresholdErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item className="intervalThreshold-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Interval threshold:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setIntervalThreshold(parseFloat(event.target.value))}
-                                        error={thresholdError}
-                                        label={thresholdError?"Error":""}
-                                        defaultValue={intervalThreshold.toString()}
-                                        helperText={thresholdErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </Grid>
-                </Zoom>
+                    </Zoom>
                 </Container>
             </Paper>
 
             <Divider />
-            
+
             <Collapse in={solve}>
                 <Fade triggerOnce>
                     <Paper className={styleClasses.paper}>
-                        {solve && <Steps params={params}/>}
+                        {solve && <Steps params={params} />}
                     </Paper>
                 </Fade>
             </Collapse>
-            <Tooltip arrow title="Help" placement="top">
-                <Fab color="secondary" aria-label="help" className={styleClasses.fab} onClick={openHelp}>
-                    <HelpIcon />
-                </Fab>
-            </Tooltip>
+            {""}
             <Joyride
-                scrollToFirstStep 
+                scrollToFirstStep
                 run={runTour}
                 steps={TOUR_STEPS}
                 continuous={true}
                 showSkipButton={true}
-                    locale={{
+                locale={{
                     last: "End tour",
                 }}
                 callback={joyrideCallback}
@@ -367,7 +363,7 @@ function OptiGoldenSearch({methodName, markdown}) {
     );
 }
 
-function Steps({params}) {
+function Steps({ params }) {
 
     const styleClasses = useStyles();
 
@@ -464,20 +460,24 @@ function Steps({params}) {
             \\ ${formatLatex(currentResult.interval)} &<& ${formatLatex(params.intervalThreshold)}
             `;
         }
-        
+
         latexContent += String.raw`\end{array}\end{array}`;
 
         graphCallback = (calculator, currentResult) => {
-            calculator.current.setExpression({ id: 'function', color: Desmos.Colors.BLUE, latex: params.functionLatex});
-            calculator.current.setExpression({ id: 'x_a', color: Desmos.Colors.RED, pointStyle: Desmos.Styles.POINT, label: "x_a", showLabel:true, latex:
-                `(${currentResult.aX}, ${currentResult.lowerFuncResult})` });
-            calculator.current.setExpression({ id: 'x_b', color: Desmos.Colors.GREEN, pointStyle: Desmos.Styles.POINT, label: "x_b", showLabel:true, latex:
-                `(${currentResult.bX}, ${currentResult.upperFuncResult})` });
+            calculator.current.setExpression({ id: 'function', color: Desmos.Colors.BLUE, latex: params.functionLatex });
+            calculator.current.setExpression({
+                id: 'x_a', color: Desmos.Colors.RED, pointStyle: Desmos.Styles.POINT, label: "x_a", showLabel: true, latex:
+                    `(${currentResult.aX}, ${currentResult.lowerFuncResult})`
+            });
+            calculator.current.setExpression({
+                id: 'x_b', color: Desmos.Colors.GREEN, pointStyle: Desmos.Styles.POINT, label: "x_b", showLabel: true, latex:
+                    `(${currentResult.bX}, ${currentResult.upperFuncResult})`
+            });
         }
     }
 
     const smallScreen = useMediaQuery(useTheme().breakpoints.down('sm'));
-    
+
     return (
         <Container className={styleClasses.container}>
             <Collapse in={hasError}>
@@ -498,13 +498,13 @@ function Steps({params}) {
                             </Card>
                         </Zoom>
                     </Grid>
-                
-                    <Grid container xs item direction={smallScreen?"column":"row"} alignItems="center" justify="space-evenly">
+
+                    <Grid container xs item direction={smallScreen ? "column" : "row"} alignItems="center" justify="space-evenly">
                         <Grid xs item className="iteration-slider">
                             <Slide direction="left" triggerOnce>
-                                <Box id="iteration-slider" height={smallScreen?null:"20rem"} width={smallScreen?"70vw":null}>
+                                <Box id="iteration-slider" height={smallScreen ? null : "20rem"} width={smallScreen ? "70vw" : null}>
                                     <Slider
-                                        orientation={smallScreen?"horizontal":"vertical"}
+                                        orientation={smallScreen ? "horizontal" : "vertical"}
                                         onChangeCommitted={(event, value) => setCurrentIteration(value)}
                                         defaultValue={1}
                                         aria-labelledby="discrete-slider-small-steps"
@@ -514,7 +514,7 @@ function Steps({params}) {
                                         max={params.iterations}
                                         valueLabelDisplay="on"
                                     />
-                                    
+
                                 </Box>
                             </Slide>
                         </Grid>
@@ -533,9 +533,7 @@ function Steps({params}) {
                             </Grid>
                         </Grid>
                         <Grid xs item className="graph-button">
-                            <Slide direction="right" triggerOnce>
-                                <Graph params={{currentIteration, graphCallback, smallScreen, ...params}} />
-                            </Slide>
+
                         </Grid>
                     </Grid>
                 </Grid>

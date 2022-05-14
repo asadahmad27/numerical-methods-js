@@ -1,6 +1,6 @@
-import {isValidMath, mathjsKeywords, mathjsToLatex, formatLatex} from "../../utils";
-import {getBinomialCoefficient} from "../../matrix_utils";
-import React, {useState, useEffect, useMemo} from "react";
+import { isValidMath, mathjsKeywords, mathjsToLatex, formatLatex } from "../../utils";
+import { getBinomialCoefficient } from "../../matrix_utils";
+import React, { useState, useEffect, useMemo } from "react";
 import Header from "../../header/Header";
 
 import { addStyles, EditableMathField } from 'react-mathquill';
@@ -20,7 +20,7 @@ import { Alert } from '@material-ui/lab';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fab from '@material-ui/core/Fab';
 import HelpIcon from '@material-ui/icons/Help';
-import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps} from "react-joyride";
+import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps } from "react-joyride";
 import Collapse from '@material-ui/core/Collapse';
 import { Fade, Zoom, Slide } from "react-awesome-reveal";
 import { makeStyles } from '@material-ui/core/styles';
@@ -30,7 +30,7 @@ const TOUR_STEPS: JoyrideStep[] = [
         target: ".function-input",
         title: "Function",
         content:
-        "Type a math function which only has the variable x. cos(x), sin(x) and e^x are supported.",
+            "Type a math function which only has the variable x. cos(x), sin(x) and e^x are supported.",
         disableBeacon: true,
     },
     {
@@ -61,36 +61,36 @@ const TOUR_STEPS: JoyrideStep[] = [
 
 // Styles
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.primary,
-    margin: theme.spacing(1),
-  },
-  container: {
-    "& > *": {
-        margin: theme.spacing(1)
-    }
-  },
-  card: {
-    margin: theme.spacing(0.5),
-  },
-  cardContent: {
-    overflow: 'auto',
-    "& > *": {
-        margin: theme.spacing(0.5)
-    }
-  },
-  fab: {
-    position: 'fixed',
-    bottom: theme.spacing(4),
-    right: theme.spacing(2),
-  },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.primary,
+        margin: theme.spacing(1),
+    },
+    container: {
+        "& > *": {
+            margin: theme.spacing(1)
+        }
+    },
+    card: {
+        margin: theme.spacing(0.5),
+    },
+    cardContent: {
+        overflow: 'auto',
+        "& > *": {
+            margin: theme.spacing(0.5)
+        }
+    },
+    fab: {
+        position: 'fixed',
+        bottom: theme.spacing(4),
+        right: theme.spacing(2),
+    },
 }));
 
 addStyles(); // inserts the required css to the <head> block for mathquill
 
-function DiffFinite({methodName, markdown}) {
+function DiffFinite({ methodName, markdown }) {
     useEffect(() => {
         // Set webpage title
         document.title = methodName;
@@ -113,11 +113,11 @@ function DiffFinite({methodName, markdown}) {
                 }
             }
         });
-        functionValue.evaluate({x : 0});
+        functionValue.evaluate({ x: 0 });
     }
-    catch(e) {
+    catch (e) {
         functionError = true;
-        functionErrorText = e === "variableName" ? "Only x variable is allowed." :  "Invalid equation!";
+        functionErrorText = e === "variableName" ? "Only x variable is allowed." : "Invalid equation!";
     }
 
     // x values
@@ -163,8 +163,8 @@ function DiffFinite({methodName, markdown}) {
             derivValue = derivative(derivValue, 'x');
         }
         const evaluateFunction = (forward, offset) => {
-            const step = offset * stepSize ;
-            return forward ? functionValue.evaluate({x : xInput + step}) : functionValue.evaluate({x : xInput - step});
+            const step = offset * stepSize;
+            return forward ? functionValue.evaluate({ x: xInput + step }) : functionValue.evaluate({ x: xInput - step });
         }
 
         const denominator = Math.pow(stepSize, order);
@@ -179,7 +179,7 @@ function DiffFinite({methodName, markdown}) {
         let centralDiff = 0;
         if (order > 1) {
             for (let i = 0; i <= order; i++) {
-                centralDiff += Math.pow(-1, i) * getBinomialCoefficient(order, i) * evaluateFunction(true, order/2 - i) / denominator;
+                centralDiff += Math.pow(-1, i) * getBinomialCoefficient(order, i) * evaluateFunction(true, order / 2 - i) / denominator;
             }
         }
         else {
@@ -187,12 +187,12 @@ function DiffFinite({methodName, markdown}) {
             centralDiff = (evaluateFunction(true, 1) - evaluateFunction(false, 1)) / (2 * stepSize);
         }
 
-        const correctDerivative = derivValue.evaluate({x : xInput});
+        const correctDerivative = derivValue.evaluate({ x: xInput });
 
         const forwardError = Math.abs(correctDerivative - forwardDiff);
         const backwardError = Math.abs(correctDerivative - backwardDiff);
         const centralError = Math.abs(correctDerivative - centralDiff);
-        
+
         latexContent = String.raw`
         \displaystyle
         \begin{array}{l}
@@ -210,7 +210,7 @@ function DiffFinite({methodName, markdown}) {
         for (let i = 0; i <= order; i++) {
             //forwardDiff += Math.pow(-1, order - i) * getBinomialCoefficient(order, i) * evaluateFunction(true, i) / denominator;
             latexContent += String.raw`
-            (${Math.pow(-1, order - i)})(${getBinomialCoefficient(order, i)})(${formatLatex(evaluateFunction(true, i))}) ${i===order? '':'+'}
+            (${Math.pow(-1, order - i)})(${getBinomialCoefficient(order, i)})(${formatLatex(evaluateFunction(true, i))}) ${i === order ? '' : '+'}
             `;
         }
         latexContent += String.raw`
@@ -229,7 +229,7 @@ function DiffFinite({methodName, markdown}) {
         for (let i = 0; i <= order; i++) {
             // backwardDiff += Math.pow(-1, i) * getBinomialCoefficient(order, i) * evaluateFunction(false, i) / denominator;
             latexContent += String.raw`
-            (${Math.pow(-1, i)})(${getBinomialCoefficient(order, i)})(${formatLatex(evaluateFunction(false, i))}) ${i===order? '':'+'}
+            (${Math.pow(-1, i)})(${getBinomialCoefficient(order, i)})(${formatLatex(evaluateFunction(false, i))}) ${i === order ? '' : '+'}
             `;
         }
         latexContent += String.raw`
@@ -245,7 +245,7 @@ function DiffFinite({methodName, markdown}) {
             \begin{array}{lcl}
             \\ \text{Central difference} &=& \frac{1}{2h} [f(x+h) - f(x-h)]
             \\
-            \\ &=& \frac{1}{${formatLatex(2*stepSize)}} [${formatLatex(evaluateFunction(true, 1))} - ${formatLatex(evaluateFunction(false, 1))} ]
+            \\ &=& \frac{1}{${formatLatex(2 * stepSize)}} [${formatLatex(evaluateFunction(true, 1))} - ${formatLatex(evaluateFunction(false, 1))} ]
             \\
             \\ &=& ${formatLatex(centralDiff)}
             \end{array}
@@ -261,7 +261,7 @@ function DiffFinite({methodName, markdown}) {
             `;
             for (let i = 0; i <= order; i++) {
                 latexContent += String.raw`
-                (${Math.pow(-1, i)})(${getBinomialCoefficient(order, i)})(${formatLatex(evaluateFunction(true, order/2 - i))}) ${i===order? '':'+'}
+                (${Math.pow(-1, i)})(${getBinomialCoefficient(order, i)})(${formatLatex(evaluateFunction(true, order / 2 - i))}) ${i === order ? '' : '+'}
                 `;
             }
             latexContent += String.raw`
@@ -295,142 +295,138 @@ function DiffFinite({methodName, markdown}) {
             setRunTour(false);
         }
     };
-    
+
     return (
         <>
             <Header methodName={methodName} markdown={markdown} />
             <Paper className={styleClasses.paper}>
                 <Container className={styleClasses.container}>
-                <Zoom duration={500} triggerOnce cascade>
-                    <Typography variant="body1">
-                    
-                    </Typography>
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item className="function-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Function:
-                                    </Typography>
-                                    <EditableMathField
-                                        disabled={false}
-                                        latex={functionLatex}
-                                        onChange={(mathField) => {
-                                            setFunctionText(mathField.text());
-                                            setFunctionLatex(mathField.latex());
-                                        }}
-                                        mathquillDidMount={(mathField) => {
-                                            setFunctionText(mathField.text())
-                                        }}
-                                    />
-                                    <Collapse in={functionError}>
-                                        <Alert severity="error">
-                                            {functionErrorText}
-                                        </Alert>
-                                    </Collapse>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid xs item className="x-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        x:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setXInput(parseFloat(event.target.value))}
-                                        error={xInputError}
-                                        label={xInputError?"Error":""}
-                                        defaultValue={xInput.toString()}
-                                        helperText={xInputErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </Grid>
+                    <Zoom duration={500} triggerOnce cascade>
+                        <Typography variant="body1">
 
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item className="order-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Order:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setOrder(parseInt(event.target.value))}
-                                        error={orderError}
-                                        label={orderError?"Error":""}
-                                        defaultValue={order.toString()}
-                                        helperText={orderErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
+                        </Typography>
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item className="function-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Function:
+                                        </Typography>
+                                        <EditableMathField
+                                            disabled={false}
+                                            latex={functionLatex}
+                                            onChange={(mathField) => {
+                                                setFunctionText(mathField.text());
+                                                setFunctionLatex(mathField.latex());
+                                            }}
+                                            mathquillDidMount={(mathField) => {
+                                                setFunctionText(mathField.text())
+                                            }}
+                                        />
+                                        <Collapse in={functionError}>
+                                            <Alert severity="error">
+                                                {functionErrorText}
+                                            </Alert>
+                                        </Collapse>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid xs item className="x-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            x:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setXInput(parseFloat(event.target.value))}
+                                            error={xInputError}
+                                            label={xInputError ? "Error" : ""}
+                                            defaultValue={xInput.toString()}
+                                            helperText={xInputErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                        <Grid xs item className="stepSize-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Step size, h:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setStepSize(parseFloat(event.target.value))}
-                                        error={stepSizeError}
-                                        label={stepSizeError?"Error":""}
-                                        defaultValue={stepSize.toString()}
-                                        helperText={stepSizeErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
+
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item className="order-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Order:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setOrder(parseInt(event.target.value))}
+                                            error={orderError}
+                                            label={orderError ? "Error" : ""}
+                                            defaultValue={order.toString()}
+                                            helperText={orderErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid xs item className="stepSize-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Step size, h:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setStepSize(parseFloat(event.target.value))}
+                                            error={stepSizeError}
+                                            label={stepSizeError ? "Error" : ""}
+                                            defaultValue={stepSize.toString()}
+                                            helperText={stepSizeErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Zoom>
+                    </Zoom>
                 </Container>
             </Paper>
 
             <Divider />
-            
+
             <Collapse in={solve}>
                 <Fade triggerOnce>
                     <Paper className={styleClasses.paper}>
                         {solve &&
-                        <Container className={styleClasses.container}>
-                            <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                                <Grid xs item className="step-math">
-                                    <Slide direction="left" triggerOnce>
-                                        <Card className={styleClasses.card}>
-                                            <CardContent className={styleClasses.cardContent}>
-                                                <TeX math={latexContent} block />
-                                            </CardContent>
-                                        </Card>
-                                    </Slide>
+                            <Container className={styleClasses.container}>
+                                <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                                    <Grid xs item className="step-math">
+                                        <Slide direction="left" triggerOnce>
+                                            <Card className={styleClasses.card}>
+                                                <CardContent className={styleClasses.cardContent}>
+                                                    <TeX math={latexContent} block />
+                                                </CardContent>
+                                            </Card>
+                                        </Slide>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        </Container>
+                            </Container>
                         }
                     </Paper>
                 </Fade>
             </Collapse>
-            <Tooltip arrow title="Help" placement="top">
-                <Fab color="secondary" aria-label="help" className={styleClasses.fab} onClick={openHelp}>
-                    <HelpIcon />
-                </Fab>
-            </Tooltip>
+            {""}
             <Joyride
-                scrollToFirstStep 
+                scrollToFirstStep
                 run={runTour}
                 steps={TOUR_STEPS}
                 continuous={true}
                 showSkipButton={true}
-                    locale={{
+                locale={{
                     last: "End tour",
                 }}
                 callback={joyrideCallback}

@@ -1,6 +1,6 @@
-import {isValidMath, mathjsToLatex, formatLatex, mathjsKeywords} from "../../utils";
-import {initialMatrix17, generateGridCallback, createNewColumn, gridTo2DArray, matrixToLatex} from "../../matrix_utils";
-import React, {useState, useEffect} from "react";
+import { isValidMath, mathjsToLatex, formatLatex, mathjsKeywords } from "../../utils";
+import { initialMatrix17, generateGridCallback, createNewColumn, gridTo2DArray, matrixToLatex } from "../../matrix_utils";
+import React, { useState, useEffect } from "react";
 import Header from "../../header/Header";
 
 import { addStyles, EditableMathField } from 'react-mathquill';
@@ -22,7 +22,7 @@ import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fab from '@material-ui/core/Fab';
 import HelpIcon from '@material-ui/icons/Help';
-import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps} from "react-joyride";
+import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps } from "react-joyride";
 import Collapse from '@material-ui/core/Collapse';
 import { Fade, Zoom, Slide } from "react-awesome-reveal";
 import { useTheme } from '@material-ui/core/styles';
@@ -36,20 +36,20 @@ const TOUR_STEPS: JoyrideStep[] = [
         target: ".function-input",
         title: "Function",
         content:
-        "Type a math function with multiple variables. Variable names must contain only one alphabet, such as x, y, z etc.",
+            "Type a math function with multiple variables. Variable names must contain only one alphabet, such as x, y, z etc.",
         disableBeacon: true,
     },
     {
         target: ".variables-display",
         title: "Variables",
         content:
-        "The variables of the function are displayed here.",
+            "The variables of the function are displayed here.",
     },
     {
         target: ".vector-input",
         title: "Initial Vector",
         content:
-        "Specify the initial values of the variables here.",
+            "Specify the initial values of the variables here.",
     },
     {
         target: ".initialRoot-input",
@@ -79,36 +79,36 @@ const TOUR_STEPS: JoyrideStep[] = [
 
 // Styles
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.primary,
-    margin: theme.spacing(1),
-  },
-  container: {
-    "& > *": {
-        margin: theme.spacing(1)
-    }
-  },
-  card: {
-    margin: theme.spacing(0.5),
-  },
-  cardContent: {
-    overflow: 'auto',
-    "& > *": {
-        margin: theme.spacing(0.5)
-    }
-  },
-  fab: {
-    position: 'fixed',
-    bottom: theme.spacing(4),
-    right: theme.spacing(2),
-  },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.primary,
+        margin: theme.spacing(1),
+    },
+    container: {
+        "& > *": {
+            margin: theme.spacing(1)
+        }
+    },
+    card: {
+        margin: theme.spacing(0.5),
+    },
+    cardContent: {
+        overflow: 'auto',
+        "& > *": {
+            margin: theme.spacing(0.5)
+        }
+    },
+    fab: {
+        position: 'fixed',
+        bottom: theme.spacing(4),
+        right: theme.spacing(2),
+    },
 }));
 
 addStyles(); // inserts the required css to the <head> block for mathquill
 
-function OptiGradient({methodName, markdown}) {
+function OptiGradient({ methodName, markdown }) {
     useEffect(() => {
         // Set webpage title
         document.title = methodName;
@@ -140,10 +140,10 @@ function OptiGradient({methodName, markdown}) {
         });
         variables = [...variables].sort(); // Alphabetical order
     }
-    catch(e) {
+    catch (e) {
         functionError = true;
-        functionErrorText = e === "variableName" ? "Variable names must contain only one alphabet! x, y, z etc" :  "Invalid equation!";
-        functionErrorText = e === "noTVariableName" ? "Variable name t is not allowed!": functionErrorText;
+        functionErrorText = e === "variableName" ? "Variable names must contain only one alphabet! x, y, z etc" : "Invalid equation!";
+        functionErrorText = e === "noTVariableName" ? "Variable name t is not allowed!" : functionErrorText;
     }
 
     // Grid
@@ -151,16 +151,16 @@ function OptiGradient({methodName, markdown}) {
     const rowHeight = smallScreen ? 35 : 35;
     const widthPadding = smallScreen ? 10 : 100;
     const heightPadding = smallScreen ? 5 : 20;
-    
+
     let [vectorState, setVectorState] = useState(initialMatrix17);
 
-    let initialVector = { columns:[], rows:[{}] };
+    let initialVector = { columns: [], rows: [{}] };
     const addVariableToVector = (variableName, variableValue) => {
         const columns = initialVector.columns;
         const rows = initialVector.rows;
         columns.push(createNewColumn(columns.length, variableName));
         let colName = `col_${columns.length}`;
-        rows[0][colName] = vectorState.rows[0].hasOwnProperty(colName) ?  vectorState.rows[0][colName] : variableValue;
+        rows[0][colName] = vectorState.rows[0].hasOwnProperty(colName) ? vectorState.rows[0][colName] : variableValue;
     }
     for (let v of variables) {
         addVariableToVector(v, 0);
@@ -207,7 +207,7 @@ function OptiGradient({methodName, markdown}) {
             derivNodes[v] = derivative(functionText, v);
         }
         for (let iter = 0; iter < iterations; iter++) {
-            const previousVector = (iter === 0) ? gridTo2DArray(vectorState.rows)[0]: results[iter - 1].newVector;
+            const previousVector = (iter === 0) ? gridTo2DArray(vectorState.rows)[0] : results[iter - 1].newVector;
             let derivScope = {};
             variables.forEach((element, index) => {
                 derivScope[element] = previousVector[index];
@@ -233,10 +233,10 @@ function OptiGradient({methodName, markdown}) {
             const simplifiedFunctionDeriv2 = derivative(simplifiedFunctionDeriv, 't');
             let rootT = initialRoot;
             let newtonIter = 1;
-            while(true) {
+            while (true) {
                 const oldT = rootT;
-                const funcValue = simplifiedFunctionDeriv.evaluate({t: rootT});
-                const derivValue = simplifiedFunctionDeriv2.evaluate({t: rootT});
+                const funcValue = simplifiedFunctionDeriv.evaluate({ t: rootT });
+                const derivValue = simplifiedFunctionDeriv2.evaluate({ t: rootT });
                 rootT = rootT - funcValue / derivValue;
                 if (!isFinite(rootT)) {
                     break;
@@ -248,7 +248,7 @@ function OptiGradient({methodName, markdown}) {
                 newtonIter++;
             }
             const newVector = variables.map((element, index) => {
-                return directionNodes[element].evaluate({t: rootT});
+                return directionNodes[element].evaluate({ t: rootT });
             });
             let functionScope = {};
             variables.forEach((element, index) => {
@@ -283,171 +283,167 @@ function OptiGradient({methodName, markdown}) {
         }
     };
 
-    let params = {functionNode, variables, derivNodes, initialRoot, errorThreshold, iterations, results};
-    
+    let params = { functionNode, variables, derivNodes, initialRoot, errorThreshold, iterations, results };
+
     return (
         <>
-            <Header methodName={methodName} markdown={markdown}/>
+            <Header methodName={methodName} markdown={markdown} />
             <Paper className={styleClasses.paper}>
                 <Container className={styleClasses.container}>
-                <Zoom duration={500} triggerOnce cascade>
-                    <Typography variant="body1">
-                    Supports as many variables as possible (x, y, z, a, b, c etc).
-                    <br/>
-                    However, the more variables, the longer the computation time.
-                    </Typography>
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item className="function-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Function:
-                                    </Typography>
-                                    <EditableMathField
-                                        disabled={false}
-                                        latex={functionLatex}
-                                        onChange={(mathField) => {
-                                            setFunctionText(mathField.text());
-                                            setFunctionLatex(mathField.latex());
-                                        }}
-                                        mathquillDidMount={(mathField) => {
-                                            setFunctionText(mathField.text());
-                                        }}
-                                    />
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid xs item className="variables-display">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Variables:
-                                    </Typography>
-                                    <Collapse in={functionError}>
-                                        <Alert severity="error">
-                                            {functionErrorText}
-                                        </Alert>
-                                    </Collapse>
-                                    <Collapse in={!functionError}>
-                                        {!functionError && <Fade triggerOnce>
-                                            <Typography variant="h6">
-                                                {[...variables].join(', ')}
-                                            </Typography>
-                                        </Fade>}
-                                    </Collapse>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </Grid>
-
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item className="vector-input" container spacing={1} direction="column" alignItems="center" justify="center">
-                            <Grid xs item>
-                                <Typography variant="h6">
-                                    Initial Point, <TeX math={String.raw`X^{(0)}`} />:
-                                </Typography>
+                    <Zoom duration={500} triggerOnce cascade>
+                        <Typography variant="body1">
+                            Supports as many variables as possible (x, y, z, a, b, c etc).
+                            <br />
+                            However, the more variables, the longer the computation time.
+                        </Typography>
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item className="function-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Function:
+                                        </Typography>
+                                        <EditableMathField
+                                            disabled={false}
+                                            latex={functionLatex}
+                                            onChange={(mathField) => {
+                                                setFunctionText(mathField.text());
+                                                setFunctionLatex(mathField.latex());
+                                            }}
+                                            mathquillDidMount={(mathField) => {
+                                                setFunctionText(mathField.text());
+                                            }}
+                                        />
+                                    </CardContent>
+                                </Card>
                             </Grid>
-                            <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
-                                <Grid key={1} item className={styleClasses.overflow}>
-                                    <ReactDataGrid
-                                        columns={vectorState.columns}
-                                        rowGetter={i => vectorState.rows[i]}
-                                        rowsCount={vectorState.rows.length}
-                                        onGridRowsUpdated={generateGridCallback(vectorState, setVectorState)}
-                                        enableCellSelect={true}
-                                        minColumnWidth={columnWidth}
-                                        minWidth={columnWidth * vectorState.columns.length + widthPadding}
-                                        rowHeight={rowHeight}
-                                        minHeight={rowHeight * (vectorState.rows.length + 1) + heightPadding}
-                                    />
+                            <Grid xs item className="variables-display">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Variables:
+                                        </Typography>
+                                        <Collapse in={functionError}>
+                                            <Alert severity="error">
+                                                {functionErrorText}
+                                            </Alert>
+                                        </Collapse>
+                                        <Collapse in={!functionError}>
+                                            {!functionError && <Fade triggerOnce>
+                                                <Typography variant="h6">
+                                                    {[...variables].join(', ')}
+                                                </Typography>
+                                            </Fade>}
+                                        </Collapse>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item className="vector-input" container spacing={1} direction="column" alignItems="center" justify="center">
+                                <Grid xs item>
+                                    <Typography variant="h6">
+                                        Initial Point, <TeX math={String.raw`X^{(0)}`} />:
+                                    </Typography>
+                                </Grid>
+                                <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
+                                    <Grid key={1} item className={styleClasses.overflow}>
+                                        <ReactDataGrid
+                                            columns={vectorState.columns}
+                                            rowGetter={i => vectorState.rows[i]}
+                                            rowsCount={vectorState.rows.length}
+                                            onGridRowsUpdated={generateGridCallback(vectorState, setVectorState)}
+                                            enableCellSelect={true}
+                                            minColumnWidth={columnWidth}
+                                            minWidth={columnWidth * vectorState.columns.length + widthPadding}
+                                            rowHeight={rowHeight}
+                                            minHeight={rowHeight * (vectorState.rows.length + 1) + heightPadding}
+                                        />
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>
-                    </Grid>
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item className="initialRoot-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Initial root guess, <TeX math={String.raw`t_0`} />:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setInitialRoot(parseFloat(event.target.value))}
-                                        error={initialRootError}
-                                        label={initialRootError?"Error":""}
-                                        defaultValue={initialRoot.toString()}
-                                        helperText={initialRootErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item className="initialRoot-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Initial root guess, <TeX math={String.raw`t_0`} />:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setInitialRoot(parseFloat(event.target.value))}
+                                            error={initialRootError}
+                                            label={initialRootError ? "Error" : ""}
+                                            defaultValue={initialRoot.toString()}
+                                            helperText={initialRootErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid xs item className="errorThreshold-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Error threshold for finding <TeX math={String.raw`t^*`} />:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setErrorThreshold(parseFloat(event.target.value))}
+                                            error={thresholdError}
+                                            label={thresholdError ? "Error" : ""}
+                                            defaultValue={errorThreshold.toString()}
+                                            helperText={thresholdErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid xs item className="iteration-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Iterations of gradient method:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setIterations(parseInt(event.target.value))}
+                                            error={iterError}
+                                            label={iterError ? "Error" : ""}
+                                            defaultValue={iterations.toString()}
+                                            helperText={iterErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                        <Grid xs item className="errorThreshold-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Error threshold for finding <TeX math={String.raw`t^*`} />:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setErrorThreshold(parseFloat(event.target.value))}
-                                        error={thresholdError}
-                                        label={thresholdError?"Error":""}
-                                        defaultValue={errorThreshold.toString()}
-                                        helperText={thresholdErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid xs item className="iteration-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Iterations of gradient method:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setIterations(parseInt(event.target.value))}
-                                        error={iterError}
-                                        label={iterError?"Error":""}
-                                        defaultValue={iterations.toString()}
-                                        helperText={iterErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </Grid>
-                </Zoom>
+                    </Zoom>
                 </Container>
             </Paper>
 
             <Divider />
-            
+
             <Collapse in={solve}>
                 <Fade triggerOnce>
                     <Paper className={styleClasses.paper}>
-                        {solve && <Steps smallScreen={smallScreen} params={params}/>}
+                        {solve && <Steps smallScreen={smallScreen} params={params} />}
                     </Paper>
                 </Fade>
             </Collapse>
-            <Tooltip arrow title="Help" placement="top">
-                <Fab color="secondary" aria-label="help" className={styleClasses.fab} onClick={openHelp}>
-                    <HelpIcon />
-                </Fab>
-            </Tooltip>
+            {""}
             <Joyride
-                scrollToFirstStep 
+                scrollToFirstStep
                 run={runTour}
                 steps={TOUR_STEPS}
                 continuous={true}
                 showSkipButton={true}
-                    locale={{
+                locale={{
                     last: "End tour",
                 }}
                 callback={joyrideCallback}
@@ -456,7 +452,7 @@ function OptiGradient({methodName, markdown}) {
     );
 }
 
-function Steps({smallScreen, params}) {
+function Steps({ smallScreen, params }) {
 
     const styleClasses = useStyles();
 
@@ -475,9 +471,9 @@ function Steps({smallScreen, params}) {
         setCurrentIteration(params.iterations);
     }
     else {
-        
+
         latexContent =
-        String.raw`
+            String.raw`
         \displaystyle
         \begin{array}{l}
         \begin{array}{lcl}
@@ -541,7 +537,7 @@ function Steps({smallScreen, params}) {
             \\ \text{Given that }\frac{df(X^{(${currentIteration})})}{dt} = 0 \text{ has no roots, the gradient method cannot proceed.}
             `;
         }
-        else {    
+        else {
             latexContent += String.raw`
             \\ \text{Using the Newton-Rhapson method}
             \\ \text{with initial guess } t_0 = ${params.initialRoot}
@@ -589,7 +585,7 @@ function Steps({smallScreen, params}) {
                             <Box id="iteration-slider" width="70vw">
                                 <Slider
                                     orientation="horizontal"
-                                    onChangeCommitted={(event, value) => {setCurrentIteration(value)}}
+                                    onChangeCommitted={(event, value) => { setCurrentIteration(value) }}
                                     defaultValue={1}
                                     aria-labelledby="discrete-slider-small-steps"
                                     step={1}

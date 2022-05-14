@@ -5,7 +5,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import Menu from "./components/menu/Menu";
 import NotFound from "./components/NotFound";
 import categories from "./constants/categories";
-import {generatePath} from "./components/utils";
+import { generatePath } from "./components/utils";
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -38,12 +38,12 @@ function App() {
                 <Menu />
               </Route>
               {
-                categories.map((category, i) => (
-                  category.methods.map((method, j) => (
+                categories?.map((category, i) => (
+                  category?.methods.map((method, j) => (
                     <Route key={i + j} exact path={generatePath(category.path, method.path)}
-                    component={
-                      () => <method.component methodName={method.name} markdown={method.markdown} />
-                    } />
+                      component={
+                        () => <method.component methodName={method.name} markdown={method.markdown} />
+                      } />
                   ))
                 )).reduce((previous, next) => previous.concat(next), [])
               }

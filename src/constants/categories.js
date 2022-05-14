@@ -83,30 +83,17 @@ const FFT = lazy(() => import('../components/methods/fourier/FFT'));
 
 const categories = [
     {
-        name : "Nonlinear Equations",
-        path : "nonlinear",
-        methods : [
+        name: "Nonlinear Equations",
+        path: "nonlinear",
+        methods: [
             {
                 name: "Bisection",
-                path : "bisection",
+                path: "bisection",
                 component: NonlinearBisection,
                 completed: true,
                 markdown: NonlinearBisectionMarkdown,
             },
-            {
-                name: "False-Position",
-                path : "false_position",
-                component: NonlinearFalsePosition,
-                completed: true,
-                markdown: NonlinearFalsePositionMarkdown,
-            },
-            {
-                name: "Fixed-Point",
-                path : "fixed_point",
-                component: NonlinearFixedPoint,
-                completed: true,
-                markdown: NonlinearFixedPointMarkdown,
-            },
+
             {
                 name: "Newton-Rhapson",
                 path: "newton",
@@ -116,7 +103,7 @@ const categories = [
             },
             {
                 name: "Modified Secant",
-                path : "secant",
+                path: "secant",
                 component: NonlinearSecant,
                 completed: true,
                 markdown: NonlinearSecantMarkdown,
@@ -124,239 +111,81 @@ const categories = [
         ]
     },
     {
-        name : "Linear Equations",
-        path : "linear",
-        methods : [
-            {
-                name: "Gauss Elimination",
-                path : "gauss",
-                component: LinearGauss,
-                completed: true,
-                markdown: LinearGaussMarkdown,
-            },
+        name: "Linear Equations",
+        path: "linear",
+        methods: [
+
             {
                 name: "Jacobi / Gauss-Seidel Iteration",
-                path : "jacobi_seidel",
+                path: "jacobi_seidel",
                 component: LinearJacobiSeidel,
                 completed: true,
                 markdown: LinearJacobiSeidelMarkdown,
             },
-            {
-                name: "LU Decomposition",
-                path : "lu",
-                component: LinearLU,
-                completed: true,
-                markdown: LinearLUMarkdown,
-            },
-            {
-                name: "QR Decomposition",
-                path : "qr",
-                component: LinearQR,
-                completed: true,
-                markdown: LinearQRMarkdown,
-            },
-            {
-                name: "Inverse Matrix",
-                path : "inverse",
-                component: LinearInverse,
-                completed: true,
-                markdown: LinearInverseMarkdown,
-            },
-            {
-                name: "Singular Value Decomposition",
-                path : "svd",
-                component: LinearSVD,
-                completed: true,
-                markdown: LinearSVDMarkdown,
-            },
-            {
-                name: "Moore-Penrose Inverse",
-                path : "penrose_inverse",
-                component: LinearPenrose,
-                completed: true,
-                markdown: LinearPenroseMarkdown,
-            },
+
         ]
     },
     {
-        name : "Eigenvalues / Eigenvectors",
-        path : "eigen",
-        methods : [
-            {
-                name: "Power Method",
-                path : "power",
-                component: EigenPower,
-                completed: true,
-                markdown: EigenPowerMarkdown,
-            },
-            {
-                name: "Inverse-Power",
-                path : "inverse",
-                component: EigenInversePower,
-                completed: true,
-                markdown: EigenInverseMarkdown,
-            },
-            {
-                name: "Shifted Inverse-Power",
-                path : "shifted",
-                component: EigenShiftedPower,
-                completed: true,
-                markdown: EigenShiftedMarkdown,
-            },
-            {
-                name: "Gerschgorin Discs",
-                path : "discs",
-                component: EigenDiscs,
-                completed: true,
-                markdown: EigenDiscsMarkdown,
-            },
-        ]
-    },
-    {
-        name : "Optimisation",
-        path : "optimisation",
-        methods : [
-            {
-                name: "Golden-Section Search",
-                path : "golden_search",
-                component: OptiGoldenSearch,
-                completed: true,
-                markdown: OptiGoldenSearchMarkdown,
-            },
-            {
-                name: "Gradient Method",
-                path : "gradient",
-                component: OptiGradient,
-                completed: true,
-                markdown: OptiGradientMarkdown,
-            },
-        ]
-    },
-    {
-        name : "Numerical Differentiation",
-        path : "differential",
-        methods : [
+        name: "Numerical Differentiation",
+        path: "differential",
+        methods: [
             {
                 name: "Finite Difference",
-                path : "finite",
+                path: "finite",
                 component: DiffFinite,
                 completed: true,
                 markdown: DiffFiniteMarkdown,
             },
-            {
-                name: "Multivariable",
-                path : "multivariable",
-                component: DiffMultivariable,
-                completed: false,
-            },
+
         ]
     },
     {
-        name : "Numerical Integration",
-        path : "integral",
-        methods : [
-            {
-                name: "Midpoint",
-                path : "midpoint",
-                component: IntegralMidpoint,
-                completed: true,
-                markdown: IntegralMidpointMarkdown,
-            },
+        name: "Numerical Integration",
+        path: "integral",
+        methods: [
+
             {
                 name: "Trapezoidal",
-                path : "trapezoidal",
+                path: "trapezoidal",
                 component: IntegralTrapezoidal,
                 completed: true,
                 markdown: IntegralTrapezoidalMarkdown,
             },
             {
                 name: "Simpson's Method",
-                path : "simpson",
+                path: "simpson",
                 component: IntegralSimpson,
                 completed: true,
                 markdown: IntegralSimpsonMarkdown,
             },
-            {
-                name: "Gauss Quadrature",
-                path : "quadrature",
-                component: IntegralQuadrature,
-                completed: true,
-                markdown: IntegralQuadratureMarkdown,
-            },
-            {
-                name: "Monte Carlo Integration",
-                path : "monte_carlo",
-                component: IntegralMonteCarlo,
-                completed: true,
-                markdown: IntegralMonteCarloMarkdown,
-            },
         ]
     },
     {
-        name : "Ordinary Differential Equations",
-        path : "ode",
-        methods : [
+        name: "Ordinary Differential Equations",
+        path: "ode",
+        methods: [
             {
                 name: "Euler's Method",
-                path : "euler",
+                path: "euler",
                 component: OdeEuler,
                 completed: true,
                 markdown: OdeEulerMarkdown,
             },
             {
                 name: "Taylor Series Method",
-                path : "taylor",
+                path: "taylor",
                 component: OdeTaylor,
                 completed: true,
                 markdown: OdeTaylorMarkdown,
             },
             {
                 name: "4th Order Runge-Kutta",
-                path : "runge",
+                path: "runge",
                 component: OdeRunge,
                 completed: true,
                 markdown: OdeRungeMarkdown,
             },
-            {
-                name: "Adams-Moulton",
-                path : "multistep",
-                component: OdeMultistep,
-                completed: true,
-                markdown: OdeMultistepMarkdown,
-            },
-            {
-                name: "1st Order Systems of Equations",
-                path : "system",
-                component: OdeSystem,
-                completed: true,
-                markdown: OdeSystemMarkdown,
-            },
-            {
-                name: "2nd Order Shooting Method",
-                path : "shooting",
-                component: OdeShooting,
-                completed: true,
-                markdown: OdeShootingMarkdown,
-            },
-            {
-                name: "2nd Order Finite Difference",
-                path : "finite_diff",
-                component: OdeFiniteDiff,
-                completed: true,
-                markdown: OdeFiniteDiffMarkdown,
-            },
-        ]
-    },
-    {
-        name : "Fourier Methods",
-        path : "fourier",
-        methods : [
-            {
-                name: "Fast Fourier Transform",
-                path : "fft",
-                component: FFT,
-                completed: false,
-            },
+
         ]
     },
 

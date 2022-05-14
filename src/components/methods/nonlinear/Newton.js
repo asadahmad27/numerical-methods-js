@@ -1,5 +1,5 @@
-import {isValidMath, mathjsToLatex, mathjsKeywords, formatLatex} from "../../utils";
-import React, {useState, useEffect} from "react";
+import { isValidMath, mathjsToLatex, mathjsKeywords, formatLatex } from "../../utils";
+import React, { useState, useEffect } from "react";
 import Header from "../../header/Header";
 import Graph from "../../Graph";
 import * as Desmos from 'desmos';
@@ -23,7 +23,7 @@ import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fab from '@material-ui/core/Fab';
 import HelpIcon from '@material-ui/icons/Help';
-import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps} from "react-joyride";
+import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps } from "react-joyride";
 import Collapse from '@material-ui/core/Collapse';
 import { Fade, Zoom, Slide } from "react-awesome-reveal";
 import { useTheme } from '@material-ui/core/styles';
@@ -35,7 +35,7 @@ const TOUR_STEPS: JoyrideStep[] = [
         target: ".function-input",
         title: "Function",
         content:
-        "Type a math function which only has the variable x. cos(x), sin(x) and e^x are supported.",
+            "Type a math function which only has the variable x. cos(x), sin(x) and e^x are supported.",
         disableBeacon: true,
     },
     {
@@ -84,36 +84,36 @@ const TOUR_STEPS: JoyrideStep[] = [
 
 // Styles
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.primary,
-    margin: theme.spacing(1),
-  },
-  container: {
-    "& > *": {
-        margin: theme.spacing(1)
-    }
-  },
-  card: {
-    margin: theme.spacing(0.5),
-  },
-  cardContent: {
-    overflow: 'auto',
-    "& > *": {
-        margin: theme.spacing(0.5)
-    }
-  },
-  fab: {
-    position: 'fixed',
-    bottom: theme.spacing(4),
-    right: theme.spacing(2),
-  },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.primary,
+        margin: theme.spacing(1),
+    },
+    container: {
+        "& > *": {
+            margin: theme.spacing(1)
+        }
+    },
+    card: {
+        margin: theme.spacing(0.5),
+    },
+    cardContent: {
+        overflow: 'auto',
+        "& > *": {
+            margin: theme.spacing(0.5)
+        }
+    },
+    fab: {
+        position: 'fixed',
+        bottom: theme.spacing(4),
+        right: theme.spacing(2),
+    },
 }));
 
 addStyles(); // inserts the required css to the <head> block for mathquill
 
-function NonlinearNewton({methodName, markdown}) {
+function NonlinearNewton({ methodName, markdown }) {
     useEffect(() => {
         // Set webpage title
         document.title = methodName;
@@ -141,9 +141,9 @@ function NonlinearNewton({methodName, markdown}) {
             }
         });
     }
-    catch(e) {
+    catch (e) {
         functionError = true;
-        functionErrorText = e === "variableName" ? "Only x variable is allowed." :  "Invalid equation!";
+        functionErrorText = e === "variableName" ? "Only x variable is allowed." : "Invalid equation!";
     }
 
     // Iterations
@@ -172,11 +172,11 @@ function NonlinearNewton({methodName, markdown}) {
     if (isValidMath(functionValue) && !hasError) {
         solve = true;
         for (let i = 0; i < iterations; i++) {
-            let previousX = (i === 0) ? initialX: results[i - 1].newX;
+            let previousX = (i === 0) ? initialX : results[i - 1].newX;
             let funcResult, derivResult;
             try {
-                funcResult = functionValue.evaluate({x : previousX});
-                derivResult = derivValue.evaluate({x : previousX});
+                funcResult = functionValue.evaluate({ x: previousX });
+                derivResult = derivValue.evaluate({ x: previousX });
             }
             catch {
                 hasError = true;
@@ -185,7 +185,7 @@ function NonlinearNewton({methodName, markdown}) {
                 solve = false;
                 break;
             }
-            
+
             let newX = previousX - funcResult / derivResult;
             let errorX = Math.abs(newX - previousX);
             results.push({
@@ -209,120 +209,116 @@ function NonlinearNewton({methodName, markdown}) {
         }
     };
 
-    let params = {functionLatex, iterations, results};
-    
+    let params = { functionLatex, iterations, results };
+
     return (
         <>
             <Header methodName={methodName} markdown={markdown} />
             <Paper className={styleClasses.paper}>
                 <Container className={styleClasses.container}>
-                <Zoom duration={500} triggerOnce cascade>
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item className="function-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Function:
-                                    </Typography>
-                                    <EditableMathField
-                                        disabled={false}
-                                        latex={functionLatex}
-                                        onChange={(mathField) => {
-                                            setFunctionText(mathField.text());
-                                            setFunctionLatex(mathField.latex());
-                                        }}
-                                        mathquillDidMount={(mathField) => {
-                                            setFunctionText(mathField.text())
-                                        }}
-                                    />
-                                </CardContent>
-                            </Card>
+                    <Zoom duration={500} triggerOnce cascade>
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item className="function-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Function:
+                                        </Typography>
+                                        <EditableMathField
+                                            disabled={false}
+                                            latex={functionLatex}
+                                            onChange={(mathField) => {
+                                                setFunctionText(mathField.text());
+                                                setFunctionLatex(mathField.latex());
+                                            }}
+                                            mathquillDidMount={(mathField) => {
+                                                setFunctionText(mathField.text())
+                                            }}
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid xs item className="derivative-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Derivative:
+                                        </Typography>
+                                        <Collapse in={functionError}>
+                                            <Alert severity="error">
+                                                {functionErrorText}
+                                            </Alert>
+                                        </Collapse>
+                                        <Collapse in={!functionError}>
+                                            {!functionError && <Fade triggerOnce><TeX math={derivLatex} block /></Fade>}
+                                        </Collapse>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                        <Grid xs item className="derivative-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Derivative:
-                                    </Typography>
-                                    <Collapse in={functionError}>
-                                        <Alert severity="error">
-                                            {functionErrorText}
-                                        </Alert>
-                                    </Collapse>
-                                    <Collapse in={!functionError}>
-                                        {!functionError && <Fade triggerOnce><TeX math={derivLatex} block /></Fade>}
-                                    </Collapse>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </Grid>
 
 
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item className="iteration-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Iterations:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setIterations(parseInt(event.target.value))}
-                                        error={iterError}
-                                        label={iterError?"Error":""}
-                                        defaultValue={iterations.toString()}
-                                        helperText={iterErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item className="iteration-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Iterations:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setIterations(parseInt(event.target.value))}
+                                            error={iterError}
+                                            label={iterError ? "Error" : ""}
+                                            defaultValue={iterations.toString()}
+                                            helperText={iterErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid xs item className="initialX-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Initial value, <TeX math={String.raw`x_0`} />:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setInitialX(parseFloat(event.target.value))}
+                                            error={initialXError}
+                                            label={initialXError ? "Error" : ""}
+                                            defaultValue={initialX.toString()}
+                                            helperText={initialXErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                        <Grid xs item className="initialX-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Initial value, <TeX math={String.raw`x_0`} />:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setInitialX(parseFloat(event.target.value))}
-                                        error={initialXError}
-                                        label={initialXError?"Error":""}
-                                        defaultValue={initialX.toString()}
-                                        helperText={initialXErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </Grid>
-                </Zoom>
+                    </Zoom>
                 </Container>
             </Paper>
 
             <Divider />
-            
+
             <Collapse in={solve}>
                 <Fade triggerOnce>
                     <Paper className={styleClasses.paper}>
-                        {solve && <Steps params={params}/>}
+                        {solve && <Steps params={params} />}
                     </Paper>
                 </Fade>
             </Collapse>
-            <Tooltip arrow title="Help" placement="top">
-                <Fab color="secondary" aria-label="help" className={styleClasses.fab} onClick={openHelp}>
-                    <HelpIcon />
-                </Fab>
-            </Tooltip>
+            {""}
             <Joyride
-                scrollToFirstStep 
+                scrollToFirstStep
                 run={runTour}
                 steps={TOUR_STEPS}
                 continuous={true}
                 showSkipButton={true}
-                    locale={{
+                locale={{
                     last: "End tour",
                 }}
                 callback={joyrideCallback}
@@ -331,7 +327,7 @@ function NonlinearNewton({methodName, markdown}) {
     );
 }
 
-function Steps({params}) {
+function Steps({ params }) {
 
     const styleClasses = useStyles();
 
@@ -352,7 +348,7 @@ function Steps({params}) {
         let previousXLatex = String.raw`x_{${currentIteration - 1}}`;
         let newXLatex = String.raw`x_{${currentIteration}}`;
         latexContent =
-        String.raw`
+            String.raw`
         \displaystyle
         \begin{array}{lll}
         \\ ${previousXLatex} &=& ${formatLatex(currentResult.previousX)}
@@ -366,18 +362,24 @@ function Steps({params}) {
         `;
 
         graphCallback = (calculator, currentResult) => {
-            calculator.current.setExpression({ id: 'function', color: Desmos.Colors.BLUE, latex: params.functionLatex});
-            calculator.current.setExpression({ id: 'derivative', color: Desmos.Colors.GREEN, lineStyle: Desmos.Styles.DOTTED, latex:
-                `(y-${currentResult.funcResult})/(x-${currentResult.previousX})=${currentResult.derivResult}` });
-            calculator.current.setExpression({ id: 'initialX', color: Desmos.Colors.ORANGE, pointStyle: Desmos.Styles.POINT, label: "initialX", showLabel:true, latex:
-                `(${currentResult.previousX}, ${currentResult.funcResult})` });
-            calculator.current.setExpression({ id: 'root', color: Desmos.Colors.RED, pointStyle: Desmos.Styles.POINT, label: "Root", showLabel:true, latex:
-                `(${currentResult.newX}, 0)` });
+            calculator.current.setExpression({ id: 'function', color: Desmos.Colors.BLUE, latex: params.functionLatex });
+            calculator.current.setExpression({
+                id: 'derivative', color: Desmos.Colors.GREEN, lineStyle: Desmos.Styles.DOTTED, latex:
+                    `(y-${currentResult.funcResult})/(x-${currentResult.previousX})=${currentResult.derivResult}`
+            });
+            calculator.current.setExpression({
+                id: 'initialX', color: Desmos.Colors.ORANGE, pointStyle: Desmos.Styles.POINT, label: "initialX", showLabel: true, latex:
+                    `(${currentResult.previousX}, ${currentResult.funcResult})`
+            });
+            calculator.current.setExpression({
+                id: 'root', color: Desmos.Colors.RED, pointStyle: Desmos.Styles.POINT, label: "Root", showLabel: true, latex:
+                    `(${currentResult.newX}, 0)`
+            });
         }
     }
 
     const smallScreen = useMediaQuery(useTheme().breakpoints.down('sm'));
-    
+
     return (
         <Container className={styleClasses.container}>
 
@@ -387,13 +389,13 @@ function Steps({params}) {
                 </Alert>
             </Collapse>
             <Collapse in={!hasError}>
-                <Grid className="results" container direction={smallScreen?"column":"row"} alignItems="center" justify="space-evenly">
+                <Grid className="results" container direction={smallScreen ? "column" : "row"} alignItems="center" justify="space-evenly">
                     <Grid xs item className="iteration-slider">
                         <Slide direction="left" triggerOnce>
-                            <Box id="iteration-slider" height={smallScreen?null:"20rem"} width={smallScreen?"70vw":null}>
+                            <Box id="iteration-slider" height={smallScreen ? null : "20rem"} width={smallScreen ? "70vw" : null}>
                                 <Slider
-                                    orientation={smallScreen?"horizontal":"vertical"}
-                                    onChange={(event, value) => {setCurrentIteration(value)}}
+                                    orientation={smallScreen ? "horizontal" : "vertical"}
+                                    onChange={(event, value) => { setCurrentIteration(value) }}
                                     defaultValue={1}
                                     aria-labelledby="discrete-slider-small-steps"
                                     step={1}
@@ -420,9 +422,7 @@ function Steps({params}) {
                         </Grid>
                     </Grid>
                     <Grid xs item className="graph-button">
-                        <Slide direction="right" triggerOnce>
-                            <Graph params={{currentIteration, graphCallback, smallScreen, ...params}} />
-                        </Slide>
+
                     </Grid>
                 </Grid>
 

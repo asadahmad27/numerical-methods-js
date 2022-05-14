@@ -1,6 +1,6 @@
-import {isValidMath, formatLatex, mathjsKeywords} from "../../utils";
-import {initialMatrix20 as initialMatrix, createNewColumn, generateGridCallback, gridTo2DArray, cloneArray} from "../../matrix_utils";
-import React, {useState, useEffect, useRef} from "react";
+import { isValidMath, formatLatex, mathjsKeywords } from "../../utils";
+import { initialMatrix20 as initialMatrix, createNewColumn, generateGridCallback, gridTo2DArray, cloneArray } from "../../matrix_utils";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "../../header/Header";
 import Graph from "../../Graph";
 import * as Desmos from 'desmos';
@@ -27,7 +27,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fab from '@material-ui/core/Fab';
 import HelpIcon from '@material-ui/icons/Help';
-import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps} from "react-joyride";
+import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps } from "react-joyride";
 import Collapse from '@material-ui/core/Collapse';
 import { Fade, Zoom, Slide } from "react-awesome-reveal";
 import { useTheme } from '@material-ui/core/styles';
@@ -45,20 +45,20 @@ const TOUR_STEPS: JoyrideStep[] = [
         target: ".order-input",
         title: "Order/Number of equations",
         content:
-        "Specify the number of 1st order differential equations.",
+            "Specify the number of 1st order differential equations.",
         disableBeacon: true,
     },
     {
         target: ".solver-type-input",
         title: "Solver Type",
         content:
-        "Choose either Euler or Runge-Kutta.",
+            "Choose either Euler or Runge-Kutta.",
     },
     {
         target: ".function-input",
         title: "Functions",
         content:
-        "Type each function containing the relevant variables. cos, sin and e are supported.",
+            "Type each function containing the relevant variables. cos, sin and e are supported.",
     },
     {
         target: ".initialVector-input",
@@ -94,36 +94,36 @@ const TOUR_STEPS: JoyrideStep[] = [
 
 // Styles
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.primary,
-    margin: theme.spacing(1),
-  },
-  container: {
-    "& > *": {
-        margin: theme.spacing(1)
-    }
-  },
-  card: {
-    margin: theme.spacing(0.5),
-  },
-  cardContent: {
-    overflow: 'auto',
-    "& > *": {
-        margin: theme.spacing(0.5)
-    }
-  },
-  fab: {
-    position: 'fixed',
-    bottom: theme.spacing(4),
-    right: theme.spacing(2),
-  },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.primary,
+        margin: theme.spacing(1),
+    },
+    container: {
+        "& > *": {
+            margin: theme.spacing(1)
+        }
+    },
+    card: {
+        margin: theme.spacing(0.5),
+    },
+    cardContent: {
+        overflow: 'auto',
+        "& > *": {
+            margin: theme.spacing(0.5)
+        }
+    },
+    fab: {
+        position: 'fixed',
+        bottom: theme.spacing(4),
+        right: theme.spacing(2),
+    },
 }));
 
 addStyles(); // inserts the required css to the <head> block for mathquill
 
-function OdeSystem({methodName, markdown}) {
+function OdeSystem({ methodName, markdown }) {
     useEffect(() => {
         // Set webpage title
         document.title = methodName;
@@ -158,9 +158,9 @@ function OdeSystem({methodName, markdown}) {
     const [functionLatexs, setFunctionLatexs] = useState(ORDER_FUNCTIONS.slice());
     const [functionTexts, setFunctionTexts] = useState(ORDER_FUNCTIONS_TEXT.slice());
 
-    const functionLatexsRef= useRef();
+    const functionLatexsRef = useRef();
     functionLatexsRef.current = functionLatexs;
-    const functionTextsRef= useRef();
+    const functionTextsRef = useRef();
     functionTextsRef.current = functionTexts;
 
     const setSpecificFunctionLatex = (i, value) => {
@@ -183,8 +183,8 @@ function OdeSystem({methodName, markdown}) {
         accumulated[v] = 0;
         return accumulated;
     }, {});
-    
-    for (let i = 0; i < order; i++){
+
+    for (let i = 0; i < order; i++) {
         if (orderError) {
             break;
         }
@@ -200,9 +200,9 @@ function OdeSystem({methodName, markdown}) {
             });
             funcNode.evaluate(testScope);
         }
-        catch(e) {
+        catch (e) {
             functionErrors[i] = true;
-            functionErrorTexts[i] = e === "variableName" ? `Only ${validVariables.join(',')} variables are allowed.` :  "Invalid equation!";
+            functionErrorTexts[i] = e === "variableName" ? `Only ${validVariables.join(',')} variables are allowed.` : "Invalid equation!";
         }
         functionNodes.push(funcNode);
     }
@@ -214,7 +214,7 @@ function OdeSystem({methodName, markdown}) {
     const heightPadding = smallScreen ? 5 : 20;
 
     let [vectorState, setVectorState] = useState(initialMatrix);
-    let initialVector = { columns:[], rows:[{}] };
+    let initialVector = { columns: [], rows: [{}] };
 
     if (!orderError) {
         const addVariableToVector = (variableName, variableValue) => {
@@ -222,10 +222,10 @@ function OdeSystem({methodName, markdown}) {
             const rows = initialVector.rows;
             columns.push(createNewColumn(columns.length, variableName));
             let colName = `col_${columns.length}`;
-            rows[0][colName] = vectorState.rows[0].hasOwnProperty(colName) ?  vectorState.rows[0][colName] : variableValue;
+            rows[0][colName] = vectorState.rows[0].hasOwnProperty(colName) ? vectorState.rows[0][colName] : variableValue;
         }
         for (let i = 0; i <= order; i++) {
-            if (i <= 9){
+            if (i <= 9) {
                 addVariableToVector(ORDER_NAMES[i], 0);
             }
         }
@@ -259,7 +259,7 @@ function OdeSystem({methodName, markdown}) {
 
     // Solve
     let solve = false;
-    let results = {x: [], y: []};
+    let results = { x: [], y: [] };
     orderArray.forEach((i) => {
         if (i !== 0) {
             results[ORDER_NAMES[i + 1]] = [];
@@ -281,7 +281,7 @@ function OdeSystem({methodName, markdown}) {
             // Find new values
             if (solverType === 'runge') {
                 // k1
-                const originalScope = {x: currentX};
+                const originalScope = { x: currentX };
                 validVariables.filter((value, index) => index !== 0).forEach((value, index) => {
                     originalScope[value] = results[value][iter].currentValue;
                 });
@@ -341,23 +341,23 @@ function OdeSystem({methodName, markdown}) {
                     const varName = ORDER_NAMES[k + 1];
                     const currentValue = results[varName][iter].currentValue;
                     const newValue = currentValue + stepSize / 6 * (results[varName][iter]['k1']
-                                                                    + 2 * results[varName][iter]['k2']
-                                                                    + 2 * results[varName][iter]['k3']
-                                                                    + results[varName][iter]['k4']);
-                    results[varName][iter] = {...results[varName][iter], newValue};
+                        + 2 * results[varName][iter]['k2']
+                        + 2 * results[varName][iter]['k3']
+                        + results[varName][iter]['k4']);
+                    results[varName][iter] = { ...results[varName][iter], newValue };
                 }
             }
             else {
                 for (let k = 0; k < order; k++) {
                     const varName = ORDER_NAMES[k + 1];
                     const currentValue = results[varName][iter].currentValue;
-                    const scope = {x: currentX, [varName]: currentValue};
-                    validVariables.filter((value, index) => index !== 0 && index !== k + 1 ).forEach((value, index) => {
+                    const scope = { x: currentX, [varName]: currentValue };
+                    validVariables.filter((value, index) => index !== 0 && index !== k + 1).forEach((value, index) => {
                         scope[value] = results[value][iter].currentValue;
                     });
                     const functionResult = functionNodes[k].evaluate(scope);
                     const newValue = currentValue + stepSize * functionResult;
-                    results[varName][iter] = {...results[varName][iter], newValue, functionResult};
+                    results[varName][iter] = { ...results[varName][iter], newValue, functionResult };
                 }
             }
             const newX = currentX + stepSize;
@@ -376,166 +376,162 @@ function OdeSystem({methodName, markdown}) {
         }
     };
 
-    let params = {functionLatexs, solverType, order, validVariables, initialVector, stepSize, iterations, results, smallScreen};
+    let params = { functionLatexs, solverType, order, validVariables, initialVector, stepSize, iterations, results, smallScreen };
     return (
         <>
             <Header methodName={methodName} markdown={markdown} />
             <Paper className={styleClasses.paper}>
                 <Container className={styleClasses.container}>
-                <Zoom duration={500} triggerOnce cascade>
-                    <Typography variant="body1">
-                        This method is applied to 1st order differential equations of the form &nbsp;
-                        <TeX math={String.raw`\frac{dy}{dx}=f(x)`} />.
-                        <br/>
-                        Up to 9 equations are supported, so even 9th order differential equation can be solved.
-                    </Typography>
-                    <Grid container spacing={0} direction="row" alignItems="center" justify="center">
-                        <Grid xs item className="order-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Order / Number of equations:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setOrder(parseInt(event.target.value))}
-                                        error={orderError}
-                                        label={orderError?"Error":""}
-                                        defaultValue={order.toString()}
-                                        helperText={orderErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid xs item className="solver-type-input" container spacing={1} direction="row" alignItems="center" justify="center">
-                            <Typography variant="h6">
-                                Solver Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </Typography>
-                            <RadioGroup aria-label="solverType" name="solverType" value={solverType} onChange={(event)=>setSolverType(event.target.value)}>
-                                <FormControlLabel value="euler" control={<Radio />} label="Euler" />
-                                <FormControlLabel value="runge" control={<Radio />} label="Runge-Kutta" />
-                            </RadioGroup>
-                        </Grid>
-                    </Grid>
-                    <Grid className="function-input" container spacing={1} direction="row" alignItems="center" justify="center">
-                        {order < 10 && orderArray.map((i) =>
-                            <Grid key={"function" + i} xs item>
+                    <Zoom duration={500} triggerOnce cascade>
+                        <Typography variant="body1">
+                            This method is applied to 1st order differential equations of the form &nbsp;
+                            <TeX math={String.raw`\frac{dy}{dx}=f(x)`} />.
+                            <br />
+                            Up to 9 equations are supported, so even 9th order differential equation can be solved.
+                        </Typography>
+                        <Grid container spacing={0} direction="row" alignItems="center" justify="center">
+                            <Grid xs item className="order-input">
                                 <Card className={styleClasses.card}>
                                     <CardContent className={styleClasses.cardContent}>
                                         <Typography variant="h6">
-                                            <TeX math={i===0 ? String.raw`y^{'}, \frac{dy}{dx}` : String.raw`${ORDER_NAMES[i + 1]}^{'}, \frac{d${ORDER_NAMES[i + 1]}}{dx}`} />
+                                            Order / Number of equations:
                                         </Typography>
-                                        <EditableMathField
+                                        <TextField
                                             disabled={false}
-                                            latex={ORDER_FUNCTIONS[i]}
-                                            onChange={(mathField) => {
-                                                setSpecificFunctionText(i, mathField.text());
-                                                setSpecificFunctionLatex(i, mathField.latex());
-                                            }}
-                                            mathquillDidMount={(mathField) => {
-                                            }}
+                                            type="number"
+                                            onChange={(event) => setOrder(parseInt(event.target.value))}
+                                            error={orderError}
+                                            label={orderError ? "Error" : ""}
+                                            defaultValue={order.toString()}
+                                            helperText={orderErrorText}
+                                            variant="outlined"
                                         />
-                                        <Collapse in={functionErrors[i]}>
-                                            <Alert severity="error">
-                                                {functionErrorTexts[i]}
-                                            </Alert>
-                                        </Collapse>
                                     </CardContent>
                                 </Card>
                             </Grid>
-                        )}
-                    </Grid>
+                            <Grid xs item className="solver-type-input" container spacing={1} direction="row" alignItems="center" justify="center">
+                                <Typography variant="h6">
+                                    Solver Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </Typography>
+                                <RadioGroup aria-label="solverType" name="solverType" value={solverType} onChange={(event) => setSolverType(event.target.value)}>
+                                    <FormControlLabel value="euler" control={<Radio />} label="Euler" />
+                                    <FormControlLabel value="runge" control={<Radio />} label="Runge-Kutta" />
+                                </RadioGroup>
+                            </Grid>
+                        </Grid>
+                        <Grid className="function-input" container spacing={1} direction="row" alignItems="center" justify="center">
+                            {order < 10 && orderArray.map((i) =>
+                                <Grid key={"function" + i} xs item>
+                                    <Card className={styleClasses.card}>
+                                        <CardContent className={styleClasses.cardContent}>
+                                            <Typography variant="h6">
+                                                <TeX math={i === 0 ? String.raw`y^{'}, \frac{dy}{dx}` : String.raw`${ORDER_NAMES[i + 1]}^{'}, \frac{d${ORDER_NAMES[i + 1]}}{dx}`} />
+                                            </Typography>
+                                            <EditableMathField
+                                                disabled={false}
+                                                latex={ORDER_FUNCTIONS[i]}
+                                                onChange={(mathField) => {
+                                                    setSpecificFunctionText(i, mathField.text());
+                                                    setSpecificFunctionLatex(i, mathField.latex());
+                                                }}
+                                                mathquillDidMount={(mathField) => {
+                                                }}
+                                            />
+                                            <Collapse in={functionErrors[i]}>
+                                                <Alert severity="error">
+                                                    {functionErrorTexts[i]}
+                                                </Alert>
+                                            </Collapse>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            )}
+                        </Grid>
 
-                    <Grid className="initialVector-input" container spacing={0} direction="row" alignItems="center" justify="center">
-                        <Grid item>
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Initial Values:
-                                    </Typography>
-                                    <ReactDataGrid
-                                        columns={vectorState.columns}
-                                        rowGetter={i => vectorState.rows[i]}
-                                        rowsCount={vectorState.rows.length}
-                                        onGridRowsUpdated={generateGridCallback(vectorState, setVectorState)}
-                                        enableCellSelect={true}
-                                        minColumnWidth={columnWidth}
-                                        minWidth={columnWidth * vectorState.columns.length + widthPadding}
-                                        rowHeight={rowHeight}
-                                        minHeight={rowHeight * (vectorState.rows.length + 1) + heightPadding}
-                                    />
-                                </CardContent>
-                            </Card>
+                        <Grid className="initialVector-input" container spacing={0} direction="row" alignItems="center" justify="center">
+                            <Grid item>
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Initial Values:
+                                        </Typography>
+                                        <ReactDataGrid
+                                            columns={vectorState.columns}
+                                            rowGetter={i => vectorState.rows[i]}
+                                            rowsCount={vectorState.rows.length}
+                                            onGridRowsUpdated={generateGridCallback(vectorState, setVectorState)}
+                                            enableCellSelect={true}
+                                            minColumnWidth={columnWidth}
+                                            minWidth={columnWidth * vectorState.columns.length + widthPadding}
+                                            rowHeight={rowHeight}
+                                            minHeight={rowHeight * (vectorState.rows.length + 1) + heightPadding}
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                    </Grid>
 
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item className="stepSize-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Step size, h:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setStepSize(parseFloat(event.target.value))}
-                                        error={stepSizeError}
-                                        label={stepSizeError?"Error":""}
-                                        defaultValue={stepSize.toString()}
-                                        helperText={stepSizeErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item className="stepSize-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Step size, h:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setStepSize(parseFloat(event.target.value))}
+                                            error={stepSizeError}
+                                            label={stepSizeError ? "Error" : ""}
+                                            defaultValue={stepSize.toString()}
+                                            helperText={stepSizeErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid xs item className="iteration-input">
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Typography variant="h6">
+                                            Iterations:
+                                        </Typography>
+                                        <TextField
+                                            disabled={false}
+                                            type="number"
+                                            onChange={(event) => setIterations(parseInt(event.target.value))}
+                                            error={iterError}
+                                            label={iterError ? "Error" : ""}
+                                            defaultValue={iterations.toString()}
+                                            helperText={iterErrorText}
+                                            variant="outlined"
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                        <Grid xs item className="iteration-input">
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Typography variant="h6">
-                                        Iterations:
-                                    </Typography>
-                                    <TextField
-                                        disabled={false}
-                                        type="number"
-                                        onChange={(event)=>setIterations(parseInt(event.target.value))}
-                                        error={iterError}
-                                        label={iterError?"Error":""}
-                                        defaultValue={iterations.toString()}
-                                        helperText={iterErrorText}
-                                        variant="outlined"
-                                    />
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </Grid>
-                </Zoom>
+                    </Zoom>
                 </Container>
             </Paper>
 
             <Divider />
-            
+
             <Collapse in={solve}>
                 <Fade triggerOnce>
                     <Paper className={styleClasses.paper}>
-                        {solve && <Steps params={params}/>}
+                        {solve && <Steps params={params} />}
                     </Paper>
                 </Fade>
             </Collapse>
-            <Tooltip arrow title="Help" placement="top">
-                <Fab color="secondary" aria-label="help" className={styleClasses.fab} onClick={openHelp}>
-                    <HelpIcon />
-                </Fab>
-            </Tooltip>
+            {""}
             <Joyride
-                scrollToFirstStep 
+                scrollToFirstStep
                 run={runTour}
                 steps={TOUR_STEPS}
                 continuous={true}
                 showSkipButton={true}
-                    locale={{
+                locale={{
                     last: "End tour",
                 }}
                 callback={joyrideCallback}
@@ -544,7 +540,7 @@ function OdeSystem({methodName, markdown}) {
     );
 }
 
-function Steps({params}) {
+function Steps({ params }) {
 
     const styleClasses = useStyles();
 
@@ -563,7 +559,7 @@ function Steps({params}) {
         const newX = results.x[currentIteration - 1];
 
         latexContent =
-        String.raw`
+            String.raw`
         \displaystyle
         \begin{array}{l}
         \begin{array}{lcl}
@@ -689,28 +685,38 @@ function Steps({params}) {
         latexContent += String.raw`\end{array}`;
 
         graphCallback = (calculator, currentResult, currentIteration) => {
-            for (let i = 0; i < params.iterations; i++){
+            for (let i = 0; i < params.iterations; i++) {
                 const r = params.results['y'][i];
                 if (i === 0) {
-                    calculator.current.setExpression({ id: "starting", color: Desmos.Colors.BLUE, pointStyle: Desmos.Styles.POINT, latex:
-                    `(${params.initialVector[0]}, ${r.currentValue})` });
+                    calculator.current.setExpression({
+                        id: "starting", color: Desmos.Colors.BLUE, pointStyle: Desmos.Styles.POINT, latex:
+                            `(${params.initialVector[0]}, ${r.currentValue})`
+                    });
                 }
-                calculator.current.setExpression({ id: i, color: Desmos.Colors.BLUE, pointStyle: Desmos.Styles.POINT, latex:
-                `(${results.x[i]}, ${r.newValue})` });
+                calculator.current.setExpression({
+                    id: i, color: Desmos.Colors.BLUE, pointStyle: Desmos.Styles.POINT, latex:
+                        `(${results.x[i]}, ${r.newValue})`
+                });
             }
             const currentX = (currentIteration === 1) ? params.initialVector[0] : results.x[currentIteration - 2];
             const newX = results.x[currentIteration - 1];
-            calculator.current.setExpression({ id: 'line', color: Desmos.Colors.GREEN, latex:
-            String.raw`(y-${currentResult.newValue})/(x-${newX})=${(currentResult.newValue - currentResult.currentValue)/(newX - currentX)} \left\{${currentX}<x<${newX}\right\} \left\{${currentResult.currentValue}<y<${currentResult.newValue}\right\}` });
-            calculator.current.setExpression({ id: "initial", color: Desmos.Colors.ORANGE, pointStyle: Desmos.Styles.POINT, label: "Initial", showLabel:true, latex:
-                `(${currentX}, ${currentResult.currentValue})` });
-            calculator.current.setExpression({ id: "final", color: Desmos.Colors.RED, pointStyle: Desmos.Styles.POINT, label: "Final", showLabel:true, latex:
-                `(${newX}, ${currentResult.newValue})` });
+            calculator.current.setExpression({
+                id: 'line', color: Desmos.Colors.GREEN, latex:
+                    String.raw`(y-${currentResult.newValue})/(x-${newX})=${(currentResult.newValue - currentResult.currentValue) / (newX - currentX)} \left\{${currentX}<x<${newX}\right\} \left\{${currentResult.currentValue}<y<${currentResult.newValue}\right\}`
+            });
+            calculator.current.setExpression({
+                id: "initial", color: Desmos.Colors.ORANGE, pointStyle: Desmos.Styles.POINT, label: "Initial", showLabel: true, latex:
+                    `(${currentX}, ${currentResult.currentValue})`
+            });
+            calculator.current.setExpression({
+                id: "final", color: Desmos.Colors.RED, pointStyle: Desmos.Styles.POINT, label: "Final", showLabel: true, latex:
+                    `(${newX}, ${currentResult.newValue})`
+            });
         }
     }
 
     const smallScreen = params.smallScreen;
-    
+
     return (
         <Container className={styleClasses.container}>
 
@@ -726,7 +732,7 @@ function Steps({params}) {
                             <Box id="iteration-slider" width="70vw">
                                 <Slider
                                     orientation="horizontal"
-                                    onChangeCommitted={(event, value) => {setCurrentIteration(value)}}
+                                    onChangeCommitted={(event, value) => { setCurrentIteration(value) }}
                                     defaultValue={1}
                                     aria-labelledby="discrete-slider-small-steps"
                                     step={1}
@@ -753,9 +759,7 @@ function Steps({params}) {
                         </Grid>
                     </Grid>
                     <Grid xs item className="graph-button">
-                        <Slide direction="right" triggerOnce>
-                            <Graph params={{currentIteration, graphCallback, smallScreen, ...params, results: params.results['y']}} />
-                        </Slide>
+
                     </Grid>
                 </Grid>
 

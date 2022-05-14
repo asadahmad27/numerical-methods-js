@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../header/Header";
 
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fab from '@material-ui/core/Fab';
 import HelpIcon from '@material-ui/icons/Help';
-import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps} from "react-joyride";
+import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps } from "react-joyride";
 import { Zoom } from "react-awesome-reveal";
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -20,7 +20,7 @@ const TOUR_STEPS: JoyrideStep[] = [
         target: ".main",
         title: "Incomplete!",
         content:
-        "Nothing to see here.",
+            "Nothing to see here.",
         disableBeacon: true,
     },
 ];
@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function FFT({methodName}) {
+function FFT({ methodName }) {
     useEffect(() => {
         // Set webpage title
         document.title = methodName;
@@ -80,7 +80,7 @@ function FFT({methodName}) {
 
     const styleClasses = useStyles();
     const smallScreen = useMediaQuery(useTheme().breakpoints.down('sm'));
-  
+
     // Joyride Tour
     const [runTour, setRunTour] = useState(false);
     const openHelp = () => {
@@ -91,34 +91,30 @@ function FFT({methodName}) {
             setRunTour(false);
         }
     };
-    
+
     return (
         <>
-            <Header methodName = {methodName} />
+            <Header methodName={methodName} />
             <Paper className={styleClasses.paper}>
                 <Container className={styleClasses.container}>
-                <Zoom duration={500} triggerOnce cascade>
-                    <Typography className="main" variant="body1">
-                        Incomplete! Nothing to see here.
-                    </Typography>
-                    <Divider />
-                    <img className={styleClasses.harold} src={haroldImage} alt="Hide the Pain Harold" />
-                </Zoom>
+                    <Zoom duration={500} triggerOnce cascade>
+                        <Typography className="main" variant="body1">
+                            Incomplete! Nothing to see here.
+                        </Typography>
+                        <Divider />
+                        <img className={styleClasses.harold} src={haroldImage} alt="Hide the Pain Harold" />
+                    </Zoom>
                 </Container>
             </Paper>
-            
-            <Tooltip arrow title="Help" placement="top">
-                <Fab color="secondary" aria-label="help" className={styleClasses.fab} onClick={openHelp}>
-                    <HelpIcon />
-                </Fab>
-            </Tooltip>
+
+            {""}
             <Joyride
-                scrollToFirstStep 
+                scrollToFirstStep
                 run={runTour}
                 steps={TOUR_STEPS}
                 continuous={true}
                 showSkipButton={true}
-                    locale={{
+                locale={{
                     last: "End tour",
                 }}
                 callback={joyrideCallback}

@@ -1,7 +1,9 @@
-import {formatLatex} from "../../utils";
-import {initialMatrix14 as initialMatrix, initialInputColumn14 as initialInputColumn,
-generateGridCallback, createNewColumn, createNewRow, gridTo2DArray, cloneArray, matrixToLatex} from "../../matrix_utils";
-import React, {useState, useEffect} from "react";
+import { formatLatex } from "../../utils";
+import {
+    initialMatrix14 as initialMatrix, initialInputColumn14 as initialInputColumn,
+    generateGridCallback, createNewColumn, createNewRow, gridTo2DArray, cloneArray, matrixToLatex
+} from "../../matrix_utils";
+import React, { useState, useEffect } from "react";
 import Header from "../../header/Header";
 
 import { identity, subtract, multiply, inv } from 'mathjs';
@@ -27,7 +29,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fab from '@material-ui/core/Fab';
 import HelpIcon from '@material-ui/icons/Help';
-import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps} from "react-joyride";
+import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps } from "react-joyride";
 import Collapse from '@material-ui/core/Collapse';
 import { Fade, Zoom, Slide } from "react-awesome-reveal";
 import { useTheme } from '@material-ui/core/styles';
@@ -41,44 +43,44 @@ const TOUR_STEPS: JoyrideStep[] = [
         target: ".scaling-input",
         title: "Use Scaling",
         content:
-        "Enable/Disable scaling",
+            "Enable/Disable scaling",
         disableBeacon: true,
     },
     {
         target: ".matrix-size-input",
         title: "Size",
         content:
-        "Increase/Reduce the matrix's size",
+            "Increase/Reduce the matrix's size",
     },
     {
         target: ".matrix-input",
         title: "Matrix",
         content:
-        "Specify the matrix here.",
+            "Specify the matrix here.",
     },
     {
         target: ".input-col-input",
         title: "Input",
         content:
-        "Specify the initial input vector.",
+            "Specify the initial input vector.",
     },
     {
         target: ".shift-input",
         title: "Shift Constant",
         content:
-        "Specify the shift constant here.",
+            "Specify the shift constant here.",
     },
     {
         target: ".iteration-input",
         title: "Iterations",
         content:
-        "Specify the number of iterations to apply the shifted power method.",
+            "Specify the number of iterations to apply the shifted power method.",
     },
     {
         target: ".iteration-slider",
         title: "Iteration slider",
         content:
-        "Change the slider to view the result of any iteration.",
+            "Change the slider to view the result of any iteration.",
     },
 ];
 
@@ -123,7 +125,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function EigenShiftedPower({methodName, markdown}) {
+function EigenShiftedPower({ methodName, markdown }) {
     useEffect(() => {
         // Set webpage title
         document.title = methodName;
@@ -169,8 +171,8 @@ function EigenShiftedPower({methodName, markdown}) {
                 }
                 inputColumns.pop();
             }
-            setGridState({columns, rows});
-            setInputColumnState({columns: inputColumns, rows: inputRows});
+            setGridState({ columns, rows });
+            setInputColumnState({ columns: inputColumns, rows: inputRows });
         };
     }
 
@@ -215,7 +217,7 @@ function EigenShiftedPower({methodName, markdown}) {
     let results = [];
     if (!hasError && !inverseError) {
         solve = true;
-        for (let iter  = 0; iter < iterations; iter++) {
+        for (let iter = 0; iter < iterations; iter++) {
             modifiedInput = multiply(inverseMatrix, modifiedInput);
             let scaleFactor = scalingMode ? Math.max(...modifiedInput.map((v) => Math.abs(v))) : 0;
             let scaledNewInput = scalingMode ? modifiedInput.map((v) => v / scaleFactor) : modifiedInput;
@@ -243,153 +245,149 @@ function EigenShiftedPower({methodName, markdown}) {
         }
     };
 
-    let params = {originalMatrix, shiftedMatrix, inverseMatrix, inverseError, inverseErrorText, originalInput, shiftConstant, scalingMode, iterations, results};
-    
+    let params = { originalMatrix, shiftedMatrix, inverseMatrix, inverseError, inverseErrorText, originalInput, shiftConstant, scalingMode, iterations, results };
+
     return (
         <>
             <Header methodName={methodName} markdown={markdown} />
             <Paper className={styleClasses.paper}>
                 <Container className={styleClasses.container}>
-                <Zoom duration={500} triggerOnce cascade>
-                    <Typography variant="body1">
-                        
-                    </Typography>
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item>
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Grid container spacing={3} direction="column" alignItems="center" justify="center">
-                                        <Grid xs item className="scaling-input" container spacing={1} direction="row" alignItems="center" justify="center">
-                                            <FormControlLabel
-                                                control={<Checkbox checked={scalingMode} onChange={(event) => setScalingMode(event.target.checked)} name="useScaling" />}
-                                                label="Use Scaling"
-                                            />
-                                        </Grid>
-                                        <Grid xs item className="matrix-size-input" container spacing={1} direction="row" alignItems="center" justify="center">
-                                            <Typography variant="h6">
-                                                Size:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            </Typography>
-                                            <IconButton variant="contained" color="primary" onClick={sizeCallback(false)} >
-                                                <RemoveCircleOutlineOutlinedIcon color="error" />
-                                            </IconButton>
-                                            <IconButton variant="contained" color="primary" onClick={sizeCallback(true)} >
-                                                <AddCircleOutlineOutlinedIcon />
-                                            </IconButton>
-                                        </Grid>
-                                        <Grid xs item className="matrix-input" container spacing={1} direction="column" alignItems="center" justify="center">
-                                            <Grid xs item>
-                                                <Typography variant="h6">
-                                                    Matrix, A:
-                                                </Typography>
+                    <Zoom duration={500} triggerOnce cascade>
+                        <Typography variant="body1">
+
+                        </Typography>
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item>
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Grid container spacing={3} direction="column" alignItems="center" justify="center">
+                                            <Grid xs item className="scaling-input" container spacing={1} direction="row" alignItems="center" justify="center">
+                                                <FormControlLabel
+                                                    control={<Checkbox checked={scalingMode} onChange={(event) => setScalingMode(event.target.checked)} name="useScaling" />}
+                                                    label="Use Scaling"
+                                                />
                                             </Grid>
-                                            <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
-                                                <Grid key={0} item className={styleClasses.overflow}>
-                                                    <ReactDataGrid
-                                                        columns={gridState.columns}
-                                                        rowGetter={i => gridState.rows[i]}
-                                                        rowsCount={gridState.rows.length}
-                                                        onGridRowsUpdated={generateGridCallback(gridState, setGridState)}
-                                                        enableCellSelect={true}
-                                                        headerRowHeight={1}
-                                                        minColumnWidth={columnWidth}
-                                                        minWidth={columnWidth * gridState.columns.length + widthPadding}
-                                                        rowHeight={rowHeight}
-                                                        minHeight={rowHeight * gridState.rows.length + heightPadding}
-                                                    />
+                                            <Grid xs item className="matrix-size-input" container spacing={1} direction="row" alignItems="center" justify="center">
+                                                <Typography variant="h6">
+                                                    Size:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </Typography>
+                                                <IconButton variant="contained" color="primary" onClick={sizeCallback(false)} >
+                                                    <RemoveCircleOutlineOutlinedIcon color="error" />
+                                                </IconButton>
+                                                <IconButton variant="contained" color="primary" onClick={sizeCallback(true)} >
+                                                    <AddCircleOutlineOutlinedIcon />
+                                                </IconButton>
+                                            </Grid>
+                                            <Grid xs item className="matrix-input" container spacing={1} direction="column" alignItems="center" justify="center">
+                                                <Grid xs item>
+                                                    <Typography variant="h6">
+                                                        Matrix, A:
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
+                                                    <Grid key={0} item className={styleClasses.overflow}>
+                                                        <ReactDataGrid
+                                                            columns={gridState.columns}
+                                                            rowGetter={i => gridState.rows[i]}
+                                                            rowsCount={gridState.rows.length}
+                                                            onGridRowsUpdated={generateGridCallback(gridState, setGridState)}
+                                                            enableCellSelect={true}
+                                                            headerRowHeight={1}
+                                                            minColumnWidth={columnWidth}
+                                                            minWidth={columnWidth * gridState.columns.length + widthPadding}
+                                                            rowHeight={rowHeight}
+                                                            minHeight={rowHeight * gridState.rows.length + heightPadding}
+                                                        />
+                                                    </Grid>
                                                 </Grid>
                                             </Grid>
-                                        </Grid>
-                                        <Grid xs item className="input-col-input" container spacing={1} direction="column" alignItems="center" justify="center">
-                                            <Grid xs item>
-                                                <Typography variant="h6">
-                                                    Initial Input, <TeX math={String.raw`X^{(0)}`} />:
-                                                </Typography>
-                                            </Grid>
-                                            <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
-                                                <Grid key={1} item className={styleClasses.overflow}>
-                                                    <ReactDataGrid
-                                                        columns={inputColumnState.columns}
-                                                        rowGetter={i => inputColumnState.rows[i]}
-                                                        rowsCount={inputColumnState.rows.length}
-                                                        onGridRowsUpdated={generateGridCallback(inputColumnState, setInputColumnState)}
-                                                        enableCellSelect={true}
-                                                        headerRowHeight={1}
-                                                        minColumnWidth={columnWidth}
-                                                        minWidth={columnWidth * inputColumnState.columns.length + widthPadding}
-                                                        rowHeight={rowHeight}
-                                                        minHeight={rowHeight * inputColumnState.rows.length + heightPadding}
-                                                    />
+                                            <Grid xs item className="input-col-input" container spacing={1} direction="column" alignItems="center" justify="center">
+                                                <Grid xs item>
+                                                    <Typography variant="h6">
+                                                        Initial Input, <TeX math={String.raw`X^{(0)}`} />:
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
+                                                    <Grid key={1} item className={styleClasses.overflow}>
+                                                        <ReactDataGrid
+                                                            columns={inputColumnState.columns}
+                                                            rowGetter={i => inputColumnState.rows[i]}
+                                                            rowsCount={inputColumnState.rows.length}
+                                                            onGridRowsUpdated={generateGridCallback(inputColumnState, setInputColumnState)}
+                                                            enableCellSelect={true}
+                                                            headerRowHeight={1}
+                                                            minColumnWidth={columnWidth}
+                                                            minWidth={columnWidth * inputColumnState.columns.length + widthPadding}
+                                                            rowHeight={rowHeight}
+                                                            minHeight={rowHeight * inputColumnState.rows.length + heightPadding}
+                                                        />
+                                                    </Grid>
                                                 </Grid>
                                             </Grid>
+                                            <Grid xs item className="shift-input">
+                                                <Card className={styleClasses.card}>
+                                                    <CardContent className={styleClasses.cardContent}>
+                                                        <Typography variant="h6">
+                                                            Shift constant, a:
+                                                        </Typography>
+                                                        <TextField
+                                                            disabled={false}
+                                                            type="number"
+                                                            onChange={(event) => setShiftConstant(parseFloat(event.target.value))}
+                                                            error={shiftError}
+                                                            label={shiftError ? "Error" : ""}
+                                                            defaultValue={shiftConstant.toString()}
+                                                            helperText={shiftErrorText}
+                                                            variant="outlined"
+                                                        />
+                                                    </CardContent>
+                                                </Card>
+                                            </Grid>
+                                            <Grid xs item className="iteration-input">
+                                                <Card className={styleClasses.card}>
+                                                    <CardContent className={styleClasses.cardContent}>
+                                                        <Typography variant="h6">
+                                                            Iterations:
+                                                        </Typography>
+                                                        <TextField
+                                                            disabled={false}
+                                                            type="number"
+                                                            onChange={(event) => setIterations(parseInt(event.target.value))}
+                                                            error={iterError}
+                                                            label={iterError ? "Error" : ""}
+                                                            defaultValue={iterations.toString()}
+                                                            helperText={iterErrorText}
+                                                            variant="outlined"
+                                                        />
+                                                    </CardContent>
+                                                </Card>
+                                            </Grid>
                                         </Grid>
-                                        <Grid xs item className="shift-input">
-                                            <Card className={styleClasses.card}>
-                                                <CardContent className={styleClasses.cardContent}>
-                                                    <Typography variant="h6">
-                                                        Shift constant, a:
-                                                    </Typography>
-                                                    <TextField
-                                                        disabled={false}
-                                                        type="number"
-                                                        onChange={(event)=>setShiftConstant(parseFloat(event.target.value))}
-                                                        error={shiftError}
-                                                        label={shiftError?"Error":""}
-                                                        defaultValue={shiftConstant.toString()}
-                                                        helperText={shiftErrorText}
-                                                        variant="outlined"
-                                                    />
-                                                </CardContent>
-                                            </Card>
-                                        </Grid>
-                                        <Grid xs item className="iteration-input">
-                                            <Card className={styleClasses.card}>
-                                                <CardContent className={styleClasses.cardContent}>
-                                                    <Typography variant="h6">
-                                                        Iterations:
-                                                    </Typography>
-                                                    <TextField
-                                                        disabled={false}
-                                                        type="number"
-                                                        onChange={(event)=>setIterations(parseInt(event.target.value))}
-                                                        error={iterError}
-                                                        label={iterError?"Error":""}
-                                                        defaultValue={iterations.toString()}
-                                                        helperText={iterErrorText}
-                                                        variant="outlined"
-                                                    />
-                                                </CardContent>
-                                            </Card>
-                                        </Grid>
-                                    </Grid>                                    
-                                </CardContent>
-                            </Card>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Zoom>
+                    </Zoom>
                 </Container>
             </Paper>
 
             <Divider />
-            
+
             <Collapse in={solve}>
                 <Fade triggerOnce>
                     <Paper className={styleClasses.paper}>
-                        {solve && <Steps smallScreen={smallScreen} params={params}/>}
+                        {solve && <Steps smallScreen={smallScreen} params={params} />}
                     </Paper>
                 </Fade>
             </Collapse>
-            <Tooltip arrow title="Help" placement="top">
-                <Fab color="secondary" aria-label="help" className={styleClasses.fab} onClick={openHelp}>
-                    <HelpIcon />
-                </Fab>
-            </Tooltip>
+            {""}
             <Joyride
-                scrollToFirstStep 
+                scrollToFirstStep
                 run={runTour}
                 steps={TOUR_STEPS}
                 continuous={true}
                 showSkipButton={true}
-                    locale={{
+                locale={{
                     last: "End tour",
                 }}
                 callback={joyrideCallback}
@@ -398,7 +396,7 @@ function EigenShiftedPower({methodName, markdown}) {
     );
 }
 
-function Steps({smallScreen, params}) {
+function Steps({ smallScreen, params }) {
 
     const styleClasses = useStyles();
 
@@ -420,7 +418,7 @@ function Steps({smallScreen, params}) {
         let currentResult = results[currentIteration - 1];
         let newInput = currentResult.newInput;
         let scaledNewInput = currentResult.scaledNewInput;
-        
+
         latexContent = String.raw`
         \displaystyle
         \begin{array}{l}
@@ -432,9 +430,9 @@ function Steps({smallScreen, params}) {
         \begin{array}{lcl}
         \\ X_{${currentIteration}} &=& (A - aI)^{-1} X_{${currentIteration - 1}}
         \\
-        \\                         &=& ${matrixToLatex(params.inverseMatrix)} ${matrixToLatex(initalInput, {single: true})}
+        \\                         &=& ${matrixToLatex(params.inverseMatrix)} ${matrixToLatex(initalInput, { single: true })}
         \\
-        \\                         &=& ${matrixToLatex(newInput, {single: true})}
+        \\                         &=& ${matrixToLatex(newInput, { single: true })}
         \\ \end{array}
         \\
         `;
@@ -444,9 +442,9 @@ function Steps({smallScreen, params}) {
             \\ \begin{array}{lcl}
             \\ X_{${currentIteration}} &=& \frac{1}{max \lbrace X_{${currentIteration}} \rbrace} X_{${currentIteration}}
             \\
-            \\                         &=& \frac{1}{${formatLatex(currentResult.scaleFactor)}} ${matrixToLatex(newInput, {single: true})}
+            \\                         &=& \frac{1}{${formatLatex(currentResult.scaleFactor)}} ${matrixToLatex(newInput, { single: true })}
             \\
-            \\                         &=& ${matrixToLatex(scaledNewInput, {single: true})}
+            \\                         &=& ${matrixToLatex(scaledNewInput, { single: true })}
             \\ 
             \\ \end{array}
             `;
@@ -457,7 +455,7 @@ function Steps({smallScreen, params}) {
         \\ \begin{array}{lcl}
         \\ \lambda_{${currentIteration}}^{-1} &=& \frac{(A - aI)^{-1} X_{${currentIteration}} \cdot X_{${currentIteration}}}{X_{${currentIteration}} \cdot X_{${currentIteration}}}
         \\
-        \\  &=& \frac{${matrixToLatex([currentResult.ax])} ${matrixToLatex(scaledNewInput, {single: true})}} {${matrixToLatex([scaledNewInput])} ${matrixToLatex(scaledNewInput, {single: true})}}
+        \\  &=& \frac{${matrixToLatex([currentResult.ax])} ${matrixToLatex(scaledNewInput, { single: true })}} {${matrixToLatex([scaledNewInput])} ${matrixToLatex(scaledNewInput, { single: true })}}
         \\
         \\  &=& ${formatLatex(currentResult.eigenvalue)}
         \\ \end{array}
@@ -468,10 +466,10 @@ function Steps({smallScreen, params}) {
         \\
         \\  &=& \frac{1}{${formatLatex(currentResult.eigenvalue)}} + ${formatLatex(params.shiftConstant)}
         \\
-        \\  &=& ${formatLatex( (1 / currentResult.eigenvalue) + params.shiftConstant)}
+        \\  &=& ${formatLatex((1 / currentResult.eigenvalue) + params.shiftConstant)}
         \\ \end{array}
         `;
-        
+
         if (currentIteration > 1) {
             let leastEigenvalue = 1 / currentResult.eigenvalue;
             let previousLeastEigenvalue = 1 / previousResult.eigenvalue;
@@ -482,7 +480,7 @@ function Steps({smallScreen, params}) {
             \\
             \\       &=& |\frac{${formatLatex(leastEigenvalue)} - ${formatLatex(previousLeastEigenvalue)}}{${formatLatex(leastEigenvalue)}}|
             \\
-            \\       &=& ${formatLatex(Math.abs((leastEigenvalue - previousLeastEigenvalue)/ leastEigenvalue))}
+            \\       &=& ${formatLatex(Math.abs((leastEigenvalue - previousLeastEigenvalue) / leastEigenvalue))}
             \\ \end{array}
             `;
         }
@@ -490,8 +488,8 @@ function Steps({smallScreen, params}) {
         latexContent += String.raw`
         \\
         \\ \end{array}`;
-     }
-    
+    }
+
     return (
         <Container className={styleClasses.container}>
             <Collapse in={hasError}>
@@ -506,13 +504,13 @@ function Steps({smallScreen, params}) {
                             <Box id="iteration-slider" width="70vw">
                                 <Slider
                                     orientation="horizontal"
-                                    onChangeCommitted={(event, value) => {setCurrentIteration(value)}}
+                                    onChangeCommitted={(event, value) => { setCurrentIteration(value) }}
                                     defaultValue={1}
                                     aria-labelledby="discrete-slider-small-steps"
                                     step={1}
                                     marks
                                     min={1}
-                                    max={params.iterations<=0 ? 1 :params.iterations}
+                                    max={params.iterations <= 0 ? 1 : params.iterations}
                                     valueLabelDisplay="on"
                                 />
                             </Box>

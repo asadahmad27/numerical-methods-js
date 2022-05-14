@@ -1,8 +1,10 @@
-import {formatLatex, formatMatrixLatex} from "../../utils";
-import {initialMatrix3 as initialMatrix, initialInputColumn3 as initialInputColumn, initialOutputColumn3 as initialOutputColumn,
-generateGridCallback, createNewColumn, createNewRow, gridTo2DArray, cloneArray,
-isDiagonallyDominant, numberFactorials, nextPermutation, generatePermutationMapping, matrixToLatex} from "../../matrix_utils";
-import React, {useState, useEffect} from "react";
+import { formatLatex, formatMatrixLatex } from "../../utils";
+import {
+    initialMatrix3 as initialMatrix, initialInputColumn3 as initialInputColumn, initialOutputColumn3 as initialOutputColumn,
+    generateGridCallback, createNewColumn, createNewRow, gridTo2DArray, cloneArray,
+    isDiagonallyDominant, numberFactorials, nextPermutation, generatePermutationMapping, matrixToLatex
+} from "../../matrix_utils";
+import React, { useState, useEffect } from "react";
 import Header from "../../header/Header";
 
 import 'katex/dist/katex.min.css';
@@ -29,7 +31,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fab from '@material-ui/core/Fab';
 import HelpIcon from '@material-ui/icons/Help';
-import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps} from "react-joyride";
+import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps } from "react-joyride";
 import Collapse from '@material-ui/core/Collapse';
 import { Fade, Zoom, Slide } from "react-awesome-reveal";
 import { useTheme } from '@material-ui/core/styles';
@@ -43,32 +45,32 @@ const TOUR_STEPS: JoyrideStep[] = [
         target: ".solver-type-input",
         title: "Solver Type",
         content:
-        "Choose either Jacobi or Gauss-Seidel.",
+            "Choose either Jacobi or Gauss-Seidel.",
         disableBeacon: true,
     },
     {
         target: ".matrix-size-input",
         title: "Size",
         content:
-        "Increase/Reduce the matrix's size",
+            "Increase/Reduce the matrix's size",
     },
     {
         target: ".matrix-input",
         title: "Matrix",
         content:
-        "Specify the matrix here.",
+            "Specify the matrix here.",
     },
     {
         target: ".input-col-input",
         title: "Input",
         content:
-        "Specify the initial input vector.",
+            "Specify the initial input vector.",
     },
     {
         target: ".output-col-input",
         title: "Output",
         content:
-        "Specify the output vector.",
+            "Specify the output vector.",
     },
     {
         target: ".errorThreshold-input",
@@ -131,11 +133,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function LinearJacobiSeidel({methodName, markdown}) {
+function LinearJacobiSeidel({ methodName, markdown }) {
     useEffect(() => {
         // Set webpage title
         document.title = methodName;
-        
+
     });
 
     const styleClasses = useStyles();
@@ -186,9 +188,9 @@ function LinearJacobiSeidel({methodName, markdown}) {
                 inputColumns.pop();
                 outputColumns.pop();
             }
-            setGridState({columns, rows});
-            setInputColumnState({columns: inputColumns, rows: inputRows});
-            setOutputColumnState({columns: outputColumns, rows: outputRows});
+            setGridState({ columns, rows });
+            setInputColumnState({ columns: inputColumns, rows: inputRows });
+            setOutputColumnState({ columns: outputColumns, rows: outputRows });
         };
     }
 
@@ -264,7 +266,7 @@ function LinearJacobiSeidel({methodName, markdown}) {
             console.log("Initially dominant!");
             dominant = true;
         }
-        
+
         if (dominant) {
             console.log("Solve Dominant!");
             let i = 0;
@@ -307,7 +309,7 @@ function LinearJacobiSeidel({methodName, markdown}) {
                     errorInput,
                     converged,
                 });
-                
+
                 i++;
                 if (converged) {
                     console.log("Converged");
@@ -336,167 +338,163 @@ function LinearJacobiSeidel({methodName, markdown}) {
         }
     };
 
-    let params = {solverType, originalMatrix, originalInput, originalOutput, matrixSize, errorThreshold, iterations, exceedIterError, exceedIterErrorText, results, permutated, triedPermutating};
-    
+    let params = { solverType, originalMatrix, originalInput, originalOutput, matrixSize, errorThreshold, iterations, exceedIterError, exceedIterErrorText, results, permutated, triedPermutating };
+
     return (
         <>
             <Header methodName={methodName} markdown={markdown} />
             <Paper className={styleClasses.paper}>
                 <Container className={styleClasses.container}>
-                <Zoom duration={500} triggerOnce cascade>
-                    <Typography variant="body1">
-                        This method is applied to matrices in the form of
-                        <TeX math={String.raw`\ Ax=B`} /> .
-                        <br/>
-                        Warning: The process of finding a diagonally-dominant form may be slow for matrices 7x7 and beyond
-                        <br/>
-                        because it needs to search through all the possible permutations.
-                    </Typography>
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item>
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Grid container spacing={1} direction="column" alignItems="center" justify="center">
-                                        <Grid xs item className="solver-type-input" container spacing={1} direction="row" alignItems="center" justify="center">
-                                            <Typography variant="h6">
-                                                Solver Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            </Typography>
-                                            <RadioGroup aria-label="solverType" name="solverType" value={solverType} onChange={(event)=>setSolverType(event.target.value)}>
-                                                <FormControlLabel value="jacobi" control={<Radio />} label="Jacobi" />
-                                                <FormControlLabel value="seidel" control={<Radio />} label="Gauss-Seidel" />
-                                            </RadioGroup>
-                                        </Grid>
-                                        <Grid xs item className="matrix-size-input" container spacing={1} direction="row" alignItems="center" justify="center">
-                                            <Typography variant="h6">
-                                                Size:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            </Typography>
-                                            <IconButton variant="contained" color="primary" onClick={sizeCallback(false)} >
-                                                <RemoveCircleOutlineOutlinedIcon color="error" />
-                                            </IconButton>
-                                            <IconButton variant="contained" color="primary" onClick={sizeCallback(true)} >
-                                                <AddCircleOutlineOutlinedIcon />
-                                            </IconButton>
-                                        </Grid>
+                    <Zoom duration={500} triggerOnce cascade>
+                        <Typography variant="body1">
+                            This method is applied to matrices in the form of
+                            <TeX math={String.raw`\ Ax=B`} /> .
+                            <br />
+                            Warning: The process of finding a diagonally-dominant form may be slow for matrices 7x7 and beyond
+                            <br />
+                            because it needs to search through all the possible permutations.
+                        </Typography>
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item>
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Grid container spacing={1} direction="column" alignItems="center" justify="center">
+                                            <Grid xs item className="solver-type-input" container spacing={1} direction="row" alignItems="center" justify="center">
+                                                <Typography variant="h6">
+                                                    Solver Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </Typography>
+                                                <RadioGroup aria-label="solverType" name="solverType" value={solverType} onChange={(event) => setSolverType(event.target.value)}>
+                                                    <FormControlLabel value="jacobi" control={<Radio />} label="Jacobi" />
+                                                    <FormControlLabel value="seidel" control={<Radio />} label="Gauss-Seidel" />
+                                                </RadioGroup>
+                                            </Grid>
+                                            <Grid xs item className="matrix-size-input" container spacing={1} direction="row" alignItems="center" justify="center">
+                                                <Typography variant="h6">
+                                                    Size:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </Typography>
+                                                <IconButton variant="contained" color="primary" onClick={sizeCallback(false)} >
+                                                    <RemoveCircleOutlineOutlinedIcon color="error" />
+                                                </IconButton>
+                                                <IconButton variant="contained" color="primary" onClick={sizeCallback(true)} >
+                                                    <AddCircleOutlineOutlinedIcon />
+                                                </IconButton>
+                                            </Grid>
 
-                                        <Grid xs item className="matrix-input" container spacing={1} direction="column" alignItems="center" justify="center">
-                                            <Grid xs item>
-                                                <Typography variant="h6">
-                                                    Matrix, A:
-                                                </Typography>
-                                            </Grid>
-                                            <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
-                                                <Grid key={0} item className={styleClasses.overflow}>
-                                                    <ReactDataGrid
-                                                        columns={gridState.columns}
-                                                        rowGetter={i => gridState.rows[i]}
-                                                        rowsCount={gridState.rows.length}
-                                                        onGridRowsUpdated={generateGridCallback(gridState, setGridState)}
-                                                        enableCellSelect={true}
-                                                        headerRowHeight={1}
-                                                        minColumnWidth={columnWidth}
-                                                        minWidth={columnWidth * gridState.columns.length + widthPadding}
-                                                        rowHeight={rowHeight}
-                                                        minHeight={rowHeight * gridState.rows.length + heightPadding}
-                                                    />
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-
-                                        <Grid xs item className="input-col-input" container spacing={1} direction="column" alignItems="center" justify="center">
-                                            <Grid xs item>
-                                                <Typography variant="h6">
-                                                    Initial Input, <TeX math={String.raw`X^{(0)}`} />:
-                                                </Typography>
-                                            </Grid>
-                                            <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
-                                                <Grid key={1} item className={styleClasses.overflow}>
-                                                    <ReactDataGrid
-                                                        columns={inputColumnState.columns}
-                                                        rowGetter={i => inputColumnState.rows[i]}
-                                                        rowsCount={inputColumnState.rows.length}
-                                                        onGridRowsUpdated={generateGridCallback(inputColumnState, setInputColumnState)}
-                                                        enableCellSelect={true}
-                                                        headerRowHeight={1}
-                                                        minColumnWidth={columnWidth}
-                                                        minWidth={columnWidth * inputColumnState.columns.length + widthPadding}
-                                                        rowHeight={rowHeight}
-                                                        minHeight={rowHeight * inputColumnState.rows.length + heightPadding}
-                                                    />
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid xs item className="output-col-input" container spacing={1} direction="column" alignItems="center" justify="center">
-                                            <Grid xs item>
-                                                <Typography variant="h6">
-                                                    Output, B:
-                                                </Typography>
-                                            </Grid>
-                                            <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
-                                                <Grid key={2} item className={styleClasses.overflow}>
-                                                    <ReactDataGrid
-                                                        columns={outputColumnState.columns}
-                                                        rowGetter={i => outputColumnState.rows[i]}
-                                                        rowsCount={outputColumnState.rows.length}
-                                                        onGridRowsUpdated={generateGridCallback(outputColumnState, setOutputColumnState)}
-                                                        enableCellSelect={true}
-                                                        headerRowHeight={1}
-                                                        minColumnWidth={columnWidth}
-                                                        minWidth={columnWidth * outputColumnState.columns.length + widthPadding}
-                                                        rowHeight={rowHeight}
-                                                        minHeight={rowHeight * outputColumnState.rows.length + heightPadding}
-                                                    />
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid xs item className="errorThreshold-input">
-                                            <Card className={styleClasses.card}>
-                                                <CardContent className={styleClasses.cardContent}>
+                                            <Grid xs item className="matrix-input" container spacing={1} direction="column" alignItems="center" justify="center">
+                                                <Grid xs item>
                                                     <Typography variant="h6">
-                                                        Error threshold:
+                                                        Matrix, A:
                                                     </Typography>
-                                                    <TextField
-                                                        disabled={false}
-                                                        type="number"
-                                                        onChange={(event)=>setErrorThreshold(parseFloat(event.target.value))}
-                                                        error={thresholdError}
-                                                        label={thresholdError?"Error":""}
-                                                        defaultValue={errorThreshold.toString()}
-                                                        helperText={thresholdErrorText}
-                                                        variant="outlined"
-                                                    />
-                                                </CardContent>
-                                            </Card>
+                                                </Grid>
+                                                <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
+                                                    <Grid key={0} item className={styleClasses.overflow}>
+                                                        <ReactDataGrid
+                                                            columns={gridState.columns}
+                                                            rowGetter={i => gridState.rows[i]}
+                                                            rowsCount={gridState.rows.length}
+                                                            onGridRowsUpdated={generateGridCallback(gridState, setGridState)}
+                                                            enableCellSelect={true}
+                                                            headerRowHeight={1}
+                                                            minColumnWidth={columnWidth}
+                                                            minWidth={columnWidth * gridState.columns.length + widthPadding}
+                                                            rowHeight={rowHeight}
+                                                            minHeight={rowHeight * gridState.rows.length + heightPadding}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+
+                                            <Grid xs item className="input-col-input" container spacing={1} direction="column" alignItems="center" justify="center">
+                                                <Grid xs item>
+                                                    <Typography variant="h6">
+                                                        Initial Input, <TeX math={String.raw`X^{(0)}`} />:
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
+                                                    <Grid key={1} item className={styleClasses.overflow}>
+                                                        <ReactDataGrid
+                                                            columns={inputColumnState.columns}
+                                                            rowGetter={i => inputColumnState.rows[i]}
+                                                            rowsCount={inputColumnState.rows.length}
+                                                            onGridRowsUpdated={generateGridCallback(inputColumnState, setInputColumnState)}
+                                                            enableCellSelect={true}
+                                                            headerRowHeight={1}
+                                                            minColumnWidth={columnWidth}
+                                                            minWidth={columnWidth * inputColumnState.columns.length + widthPadding}
+                                                            rowHeight={rowHeight}
+                                                            minHeight={rowHeight * inputColumnState.rows.length + heightPadding}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid xs item className="output-col-input" container spacing={1} direction="column" alignItems="center" justify="center">
+                                                <Grid xs item>
+                                                    <Typography variant="h6">
+                                                        Output, B:
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
+                                                    <Grid key={2} item className={styleClasses.overflow}>
+                                                        <ReactDataGrid
+                                                            columns={outputColumnState.columns}
+                                                            rowGetter={i => outputColumnState.rows[i]}
+                                                            rowsCount={outputColumnState.rows.length}
+                                                            onGridRowsUpdated={generateGridCallback(outputColumnState, setOutputColumnState)}
+                                                            enableCellSelect={true}
+                                                            headerRowHeight={1}
+                                                            minColumnWidth={columnWidth}
+                                                            minWidth={columnWidth * outputColumnState.columns.length + widthPadding}
+                                                            rowHeight={rowHeight}
+                                                            minHeight={rowHeight * outputColumnState.rows.length + heightPadding}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid xs item className="errorThreshold-input">
+                                                <Card className={styleClasses.card}>
+                                                    <CardContent className={styleClasses.cardContent}>
+                                                        <Typography variant="h6">
+                                                            Error threshold:
+                                                        </Typography>
+                                                        <TextField
+                                                            disabled={false}
+                                                            type="number"
+                                                            onChange={(event) => setErrorThreshold(parseFloat(event.target.value))}
+                                                            error={thresholdError}
+                                                            label={thresholdError ? "Error" : ""}
+                                                            defaultValue={errorThreshold.toString()}
+                                                            helperText={thresholdErrorText}
+                                                            variant="outlined"
+                                                        />
+                                                    </CardContent>
+                                                </Card>
+                                            </Grid>
                                         </Grid>
-                                    </Grid>                                    
-                                </CardContent>
-                            </Card>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Zoom>
+                    </Zoom>
                 </Container>
             </Paper>
 
             <Divider />
-            
+
             <Collapse in={solve}>
                 <Fade triggerOnce>
                     <Paper className={styleClasses.paper}>
-                        {solve && <Steps smallScreen={smallScreen} params={params}/>}
+                        {solve && <Steps smallScreen={smallScreen} params={params} />}
                     </Paper>
                 </Fade>
             </Collapse>
-            <Tooltip arrow title="Help" placement="top">
-                <Fab color="secondary" aria-label="help" className={styleClasses.fab} onClick={openHelp}>
-                    <HelpIcon />
-                </Fab>
-            </Tooltip>
+            {""}
             <Joyride
-                scrollToFirstStep 
+                scrollToFirstStep
                 run={runTour}
                 steps={TOUR_STEPS}
                 continuous={true}
                 showSkipButton={true}
-                    locale={{
+                locale={{
                     last: "End tour",
                 }}
                 callback={joyrideCallback}
@@ -505,7 +503,7 @@ function LinearJacobiSeidel({methodName, markdown}) {
     );
 }
 
-function Steps({smallScreen, params}) {
+function Steps({ smallScreen, params }) {
 
     const styleClasses = useStyles();
 
@@ -526,9 +524,9 @@ function Steps({smallScreen, params}) {
         \displaystyle
         \begin{array}{l}
         \\ \text{Cannot find a diagonally dominant matrix.}
-        \\ \overbrace{${matrixToLatex(params.originalMatrix, {leftBracketOnly: true})}}^{A}
-           \overbrace{${matrixToLatex(params.originalInput, {single: true})}}^{X_{0}}
-        &=&\overbrace{${matrixToLatex(params.originalOutput, {single: true})}}^{B}
+        \\ \overbrace{${matrixToLatex(params.originalMatrix, { leftBracketOnly: true })}}^{A}
+           \overbrace{${matrixToLatex(params.originalInput, { single: true })}}^{X_{0}}
+        &=&\overbrace{${matrixToLatex(params.originalOutput, { single: true })}}^{B}
         \end{array}
         `;
     }
@@ -545,18 +543,18 @@ function Steps({smallScreen, params}) {
             const boldRows = Object.keys(permutationMapping).map((v) => parseInt(v) + 1);
             boldRows.push(...Object.values(permutationMapping).map((v) => v + 1));
             const previousLatex = String.raw`
-            \overbrace{${matrixToLatex(params.originalMatrix, {leftBracketOnly: true, boldRows: boldRows})}}^{A}
-            \overbrace{${matrixToLatex(params.originalOutput, {single:true, rightBracketOnly:true, boldRows: boldRows})}}^{B}`;
-            let operationLatex =  String.raw`\begin{array}{l}`;
+            \overbrace{${matrixToLatex(params.originalMatrix, { leftBracketOnly: true, boldRows: boldRows })}}^{A}
+            \overbrace{${matrixToLatex(params.originalOutput, { single: true, rightBracketOnly: true, boldRows: boldRows })}}^{B}`;
+            let operationLatex = String.raw`\begin{array}{l}`;
             for (const [key, value] of Object.entries(permutationMapping)) {
                 operationLatex += String.raw`R_{${parseInt(key) + 1}} \leftrightarrow R_{${value + 1}}\\`;
             }
             operationLatex += String.raw`\end{array}`;
-            const newLatex= String.raw`
-            \overbrace{${matrixToLatex(currentResult.newMatrix, {leftBracketOnly:true, boldRows: boldRows})}}^{A}
-            \overbrace{${matrixToLatex(currentResult.newOutput, {single:true, rightBracketOnly:true, boldRows: boldRows})}}^{B}`;
+            const newLatex = String.raw`
+            \overbrace{${matrixToLatex(currentResult.newMatrix, { leftBracketOnly: true, boldRows: boldRows })}}^{A}
+            \overbrace{${matrixToLatex(currentResult.newOutput, { single: true, rightBracketOnly: true, boldRows: boldRows })}}^{B}`;
             latexContent += String.raw`
-            \\ \text{The matrix's rows are } \textbf{permutated} ${smallScreen?"\\\\":""} \text{ to make it } \textbf{strictly diagonally dominant.}
+            \\ \text{The matrix's rows are } \textbf{permutated} ${smallScreen ? "\\\\" : ""} \text{ to make it } \textbf{strictly diagonally dominant.}
             \\`
             if (smallScreen) {
                 latexContent += String.raw`
@@ -580,16 +578,16 @@ function Steps({smallScreen, params}) {
             }
         }
         else {
-            let index = params.permutated ? currentIteration - 1: currentIteration;
+            let index = params.permutated ? currentIteration - 1 : currentIteration;
             let matrix = params.permutated ? results[0].newMatrix : params.originalMatrix;
             let output = params.permutated ? results[0].newOutput : params.originalOutput;
             let solverExpressionLatex = params.solverType === "jacobi" ?
-            String.raw`
+                String.raw`
             X^{(${index})}_i &=& \frac{1}{A_{ii}}
                 \left[ B_i - \sum_{\substack{j = 1, \\ j \ne i}}^n \left( A_{ij} \cdot X^{(${index - 1})}_j \right)
                 \right]`
-            :
-            String.raw`
+                :
+                String.raw`
             X^{(${index})}_i &=& \frac{1}{A_{ii}}
                 \left[ B_i - \sum_{\substack{j = 1}}^{i-1} \left( A_{ij} \cdot X^{(${index})}_j \right)
                            - \sum_{\substack{j = i+1}}^{n} \left( A_{ij} \cdot X^{(${index - 1})}_j \right)
@@ -597,9 +595,9 @@ function Steps({smallScreen, params}) {
                 \right]`;
             latexContent += String.raw`
             \\
-            \overbrace{${matrixToLatex(matrix, {leftBracketOnly:true})}}^{A}
-            \overbrace{${matrixToLatex(currentResult.oldInput, {single: true})}}^{X^{(${index - 1})}}
-            = \overbrace{${matrixToLatex(output, {single:true})}}^{B}
+            \overbrace{${matrixToLatex(matrix, { leftBracketOnly: true })}}^{A}
+            \overbrace{${matrixToLatex(currentResult.oldInput, { single: true })}}^{X^{(${index - 1})}}
+            = \overbrace{${matrixToLatex(output, { single: true })}}^{B}
             \\
             \begin{array}{lcl}
             \\ ${solverExpressionLatex}
@@ -634,7 +632,7 @@ function Steps({smallScreen, params}) {
             latexContent += String.raw`
             \end{matrix}\right]
             \\
-            \\ X^{(${index})} &=& ${matrixToLatex(currentResult.newInput, {single: true})}
+            \\ X^{(${index})} &=& ${matrixToLatex(currentResult.newInput, { single: true })}
             \end{array}
             `;
             if (results[0].permutated) {
@@ -647,7 +645,7 @@ function Steps({smallScreen, params}) {
                 \\ \text {Given that the matrix A has been permutated in iteration 1, }
                 \\ \text {we must restore it to the original order:}
                 \\
-                \\ X^{(${index})}_{restored} = ${matrixToLatex(restoredOutput, {single: true})}
+                \\ X^{(${index})}_{restored} = ${matrixToLatex(restoredOutput, { single: true })}
                 `;
             }
             latexContent += String.raw`
@@ -670,20 +668,20 @@ function Steps({smallScreen, params}) {
             }
         }
         latexContent += String.raw`\end{array}\end{array}`;
-        
+
     }
     else {
         latexContent = String.raw`
         \displaystyle
         \begin{array}{lcl}
         \\ \text{Cannot do anything.}
-        \\ \overbrace{${matrixToLatex(params.originalMatrix, {leftBracketOnly: true})}}^{A}
-           \overbrace{${matrixToLatex(params.originalInput, {single: true})}}^{X_{0}}
-        &=&\overbrace{${matrixToLatex(params.originalOutput, {single: true})}}^{B}
+        \\ \overbrace{${matrixToLatex(params.originalMatrix, { leftBracketOnly: true })}}^{A}
+           \overbrace{${matrixToLatex(params.originalInput, { single: true })}}^{X_{0}}
+        &=&\overbrace{${matrixToLatex(params.originalOutput, { single: true })}}^{B}
         \end{array}
         `;
     }
-    
+
     return (
         <Container className={styleClasses.container}>
             <Collapse in={hasError}>
@@ -709,13 +707,13 @@ function Steps({smallScreen, params}) {
                             <Box id="iteration-slider" width="70vw">
                                 <Slider
                                     orientation="horizontal"
-                                    onChangeCommitted={(event, value) => {setCurrentIteration(value)}}
+                                    onChangeCommitted={(event, value) => { setCurrentIteration(value) }}
                                     defaultValue={currentIteration}
                                     aria-labelledby="discrete-slider-small-steps"
                                     step={1}
                                     marks
                                     min={1}
-                                    max={params.iterations<=0 ? 1 :params.iterations}
+                                    max={params.iterations <= 0 ? 1 : params.iterations}
                                     valueLabelDisplay="on"
                                 />
                             </Box>

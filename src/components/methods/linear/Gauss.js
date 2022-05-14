@@ -1,6 +1,6 @@
-import {formatLatex, formatMatrixLatex} from "../../utils";
-import {initialMatrix, initialOutputColumn, generateGridCallback, createNewColumn, createNewRow, gridTo2DArray, cloneArray, matrixToLatex} from "../../matrix_utils";
-import React, {useState, useEffect} from "react";
+import { formatLatex, formatMatrixLatex } from "../../utils";
+import { initialMatrix, initialOutputColumn, generateGridCallback, createNewColumn, createNewRow, gridTo2DArray, cloneArray, matrixToLatex } from "../../matrix_utils";
+import React, { useState, useEffect } from "react";
 import Header from "../../header/Header";
 
 import 'katex/dist/katex.min.css';
@@ -22,7 +22,7 @@ import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fab from '@material-ui/core/Fab';
 import HelpIcon from '@material-ui/icons/Help';
-import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps} from "react-joyride";
+import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps } from "react-joyride";
 import Collapse from '@material-ui/core/Collapse';
 import { Fade, Zoom, Slide } from "react-awesome-reveal";
 import { useTheme } from '@material-ui/core/styles';
@@ -36,26 +36,26 @@ const TOUR_STEPS: JoyrideStep[] = [
         target: ".matrix-col-input",
         title: "Column",
         content:
-        "Add/Remove columns",
+            "Add/Remove columns",
         disableBeacon: true,
     },
     {
         target: ".matrix-row-input",
         title: "Row",
         content:
-        "Add/Remove rows",
+            "Add/Remove rows",
     },
     {
         target: ".matrix-input",
         title: "Matrix",
         content:
-        "Specify the matrix here.",
+            "Specify the matrix here.",
     },
     {
         target: ".output-col-input",
         title: "Output",
         content:
-        "Specify the output vector.",
+            "Specify the output vector.",
     },
     {
         target: ".step-math",
@@ -112,11 +112,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function LinearGauss({methodName, markdown}) {
+function LinearGauss({ methodName, markdown }) {
     useEffect(() => {
         // Set webpage title
         document.title = methodName;
-        
+
     });
 
     const styleClasses = useStyles();
@@ -168,7 +168,7 @@ function LinearGauss({methodName, markdown}) {
                 }
                 columns.pop();
             }
-            setGridState({columns, rows});
+            setGridState({ columns, rows });
         };
     }
     const rowCallback = (add) => {
@@ -191,8 +191,8 @@ function LinearGauss({methodName, markdown}) {
                 }
                 outputColumns.pop();
             }
-            setGridState({...gridState, rows});
-            setOutputColumnState({columns: outputColumns, rows: outputRows});
+            setGridState({ ...gridState, rows });
+            setOutputColumnState({ columns: outputColumns, rows: outputRows });
         };
     }
 
@@ -206,10 +206,10 @@ function LinearGauss({methodName, markdown}) {
     const colLength = gridState.columns.length; // column dimension
     let results = [];
     let pivotLength = rowLength;
-    
-    for (let pivot  = 0; pivot < pivotLength - 1; pivot++) {
+
+    for (let pivot = 0; pivot < pivotLength - 1; pivot++) {
         let validPivot = true;
-        if (modifiedMatrix[pivot][pivot] === 0 ) {
+        if (modifiedMatrix[pivot][pivot] === 0) {
             validPivot = false;
             for (let row2 = pivot + 1; row2 < pivotLength; row2++) {
                 if (modifiedMatrix[row2][pivot] !== 0) {
@@ -233,7 +233,7 @@ function LinearGauss({methodName, markdown}) {
             }
         }
         if (validPivot) {
-            for (let row  = pivot + 1; row < pivotLength; row++) {
+            for (let row = pivot + 1; row < pivotLength; row++) {
                 let factor = modifiedMatrix[row][pivot] / modifiedMatrix[pivot][pivot];
                 let divisionByZero = false;
                 if (factor === 0) {
@@ -243,7 +243,7 @@ function LinearGauss({methodName, markdown}) {
                     continue;
                 }
                 if (!divisionByZero) {
-                    for (let col  = 0; col < colLength; col++) {
+                    for (let col = 0; col < colLength; col++) {
                         modifiedMatrix[row][col] -= factor * modifiedMatrix[pivot][col];
                     }
                     modifiedOutput[row] -= factor * modifiedOutput[pivot];
@@ -272,126 +272,122 @@ function LinearGauss({methodName, markdown}) {
         }
     };
 
-    let params = {originalMatrix, originalOutput, rowLength, colLength, iterations, results};
-    
+    let params = { originalMatrix, originalOutput, rowLength, colLength, iterations, results };
+
     return (
         <>
             <Header methodName={methodName} markdown={markdown} />
             <Paper className={styleClasses.paper}>
                 <Container className={styleClasses.container}>
-                <Zoom duration={500} triggerOnce cascade>
-                    <Typography variant="body1">
-                        This method is applied to matrices in the form of
-                        <TeX math={String.raw`\ Ax=B`} /> .
-                        <br/>
-                        <Link rel="noopener noreferrer" href="https://people.richland.edu/james/lecture/m116/matrices/pivot.html" target="_blank" aria-label="Pivoting">Pivoting</Link> is also implemented.
-                        <br/>
-                        No backsubstitution or Gauss-Jordan form due to&nbsp;
-                        <Link color="error" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=vIci3C4JkL0" target="_blank" aria-label="laziness">laziness</Link>.
-                    </Typography>
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item>
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Grid container spacing={1} direction="column" alignItems="center" justify="center">
-                                        <Grid xs item className="matrix-col-input" container spacing={1} direction="row" alignItems="center" justify="center">
-                                            <Typography variant="subtitle1">
-                                                Columns:
-                                            </Typography>
-                                            <IconButton variant="contained" color="primary" onClick={columnCallback(false)}>
-                                                <RemoveCircleOutlineOutlinedIcon color="error" />
-                                            </IconButton>
-                                            <IconButton variant="contained" color="primary" onClick={columnCallback(true)}>
-                                                <AddCircleOutlineOutlinedIcon  />
-                                            </IconButton>
-                                        </Grid>
-                                        <Grid xs item className="matrix-row-input" container spacing={1} direction="row" alignItems="center" justify="center">
-                                            <Typography variant="subtitle1">
-                                                Rows:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            </Typography>
-                                            <IconButton variant="contained" color="primary" onClick={rowCallback(false)} >
-                                                <RemoveCircleOutlineOutlinedIcon color="error" />
-                                            </IconButton>
-                                            <IconButton variant="contained" color="primary" onClick={rowCallback(true)} >
-                                                <AddCircleOutlineOutlinedIcon />
-                                            </IconButton>
-                                        </Grid>
-                                        <Grid xs item className="matrix-input" container spacing={1} direction="column" alignItems="center" justify="center">
-                                            <Grid xs item>
-                                                <Typography variant="h6">
-                                                    Matrix, A:
+                    <Zoom duration={500} triggerOnce cascade>
+                        <Typography variant="body1">
+                            This method is applied to matrices in the form of
+                            <TeX math={String.raw`\ Ax=B`} /> .
+                            <br />
+                            <Link rel="noopener noreferrer" href="https://people.richland.edu/james/lecture/m116/matrices/pivot.html" target="_blank" aria-label="Pivoting">Pivoting</Link> is also implemented.
+                            <br />
+                            No backsubstitution or Gauss-Jordan form due to&nbsp;
+                            <Link color="error" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=vIci3C4JkL0" target="_blank" aria-label="laziness">laziness</Link>.
+                        </Typography>
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item>
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Grid container spacing={1} direction="column" alignItems="center" justify="center">
+                                            <Grid xs item className="matrix-col-input" container spacing={1} direction="row" alignItems="center" justify="center">
+                                                <Typography variant="subtitle1">
+                                                    Columns:
                                                 </Typography>
+                                                <IconButton variant="contained" color="primary" onClick={columnCallback(false)}>
+                                                    <RemoveCircleOutlineOutlinedIcon color="error" />
+                                                </IconButton>
+                                                <IconButton variant="contained" color="primary" onClick={columnCallback(true)}>
+                                                    <AddCircleOutlineOutlinedIcon />
+                                                </IconButton>
                                             </Grid>
-                                            <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
-                                                <Grid key={0} item className={styleClasses.overflow}>
-                                                    <ReactDataGrid
-                                                        columns={gridState.columns}
-                                                        rowGetter={i => gridState.rows[i]}
-                                                        rowsCount={gridState.rows.length}
-                                                        onGridRowsUpdated={generateGridCallback(gridState, setGridState)}
-                                                        enableCellSelect={true}
-                                                        headerRowHeight={1}
-                                                        minColumnWidth={columnWidth}
-                                                        minWidth={columnWidth * gridState.columns.length + widthPadding}
-                                                        rowHeight={rowHeight}
-                                                        minHeight={rowHeight * gridState.rows.length + heightPadding}
-                                                    />
+                                            <Grid xs item className="matrix-row-input" container spacing={1} direction="row" alignItems="center" justify="center">
+                                                <Typography variant="subtitle1">
+                                                    Rows:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </Typography>
+                                                <IconButton variant="contained" color="primary" onClick={rowCallback(false)} >
+                                                    <RemoveCircleOutlineOutlinedIcon color="error" />
+                                                </IconButton>
+                                                <IconButton variant="contained" color="primary" onClick={rowCallback(true)} >
+                                                    <AddCircleOutlineOutlinedIcon />
+                                                </IconButton>
+                                            </Grid>
+                                            <Grid xs item className="matrix-input" container spacing={1} direction="column" alignItems="center" justify="center">
+                                                <Grid xs item>
+                                                    <Typography variant="h6">
+                                                        Matrix, A:
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
+                                                    <Grid key={0} item className={styleClasses.overflow}>
+                                                        <ReactDataGrid
+                                                            columns={gridState.columns}
+                                                            rowGetter={i => gridState.rows[i]}
+                                                            rowsCount={gridState.rows.length}
+                                                            onGridRowsUpdated={generateGridCallback(gridState, setGridState)}
+                                                            enableCellSelect={true}
+                                                            headerRowHeight={1}
+                                                            minColumnWidth={columnWidth}
+                                                            minWidth={columnWidth * gridState.columns.length + widthPadding}
+                                                            rowHeight={rowHeight}
+                                                            minHeight={rowHeight * gridState.rows.length + heightPadding}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid xs item className="output-col-input" container spacing={1} direction="column" alignItems="center" justify="center">
+                                                <Grid xs item>
+                                                    <Typography variant="h6">
+                                                        Output, B:
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
+                                                    <Grid key={1} item className={styleClasses.overflow}>
+                                                        <ReactDataGrid
+                                                            columns={outputColumnState.columns}
+                                                            rowGetter={i => outputColumnState.rows[i]}
+                                                            rowsCount={outputColumnState.rows.length}
+                                                            onGridRowsUpdated={generateGridCallback(outputColumnState, setOutputColumnState)}
+                                                            enableCellSelect={true}
+                                                            headerRowHeight={1}
+                                                            minColumnWidth={columnWidth}
+                                                            minWidth={columnWidth * outputColumnState.columns.length + widthPadding}
+                                                            rowHeight={rowHeight}
+                                                            minHeight={rowHeight * outputColumnState.rows.length + heightPadding}
+                                                        />
+                                                    </Grid>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                        <Grid xs item className="output-col-input" container spacing={1} direction="column" alignItems="center" justify="center">
-                                            <Grid xs item>
-                                                <Typography variant="h6">
-                                                    Output, B:
-                                                </Typography>
-                                            </Grid>
-                                            <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
-                                                <Grid key={1} item className={styleClasses.overflow}>
-                                                    <ReactDataGrid
-                                                        columns={outputColumnState.columns}
-                                                        rowGetter={i => outputColumnState.rows[i]}
-                                                        rowsCount={outputColumnState.rows.length}
-                                                        onGridRowsUpdated={generateGridCallback(outputColumnState, setOutputColumnState)}
-                                                        enableCellSelect={true}
-                                                        headerRowHeight={1}
-                                                        minColumnWidth={columnWidth}
-                                                        minWidth={columnWidth * outputColumnState.columns.length + widthPadding}
-                                                        rowHeight={rowHeight}
-                                                        minHeight={rowHeight * outputColumnState.rows.length + heightPadding}
-                                                    />
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>                                    
-                                </CardContent>
-                            </Card>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Zoom>
+                    </Zoom>
                 </Container>
             </Paper>
 
             <Divider />
-            
+
             <Collapse in={solve}>
                 <Fade triggerOnce>
                     <Paper className={styleClasses.paper}>
-                        {solve && <Steps smallScreen={smallScreen} params={params}/>}
+                        {solve && <Steps smallScreen={smallScreen} params={params} />}
                     </Paper>
                 </Fade>
             </Collapse>
-            <Tooltip arrow title="Help" placement="top">
-                <Fab color="secondary" aria-label="help" className={styleClasses.fab} onClick={openHelp}>
-                    <HelpIcon />
-                </Fab>
-            </Tooltip>
+            {""}
             <Joyride
-                scrollToFirstStep 
+                scrollToFirstStep
                 run={runTour}
                 steps={TOUR_STEPS}
                 continuous={true}
                 showSkipButton={true}
-                    locale={{
+                locale={{
                     last: "End tour",
                 }}
                 callback={joyrideCallback}
@@ -400,7 +396,7 @@ function LinearGauss({methodName, markdown}) {
     );
 }
 
-function Steps({smallScreen, params}) {
+function Steps({ smallScreen, params }) {
 
     const styleClasses = useStyles();
 
@@ -413,10 +409,10 @@ function Steps({smallScreen, params}) {
     else if (params.iterations > 0 && currentIteration > params.iterations) {
         setCurrentIteration(params.iterations);
     }
-    else if (params.iterations >= 2 ) {
+    else if (params.iterations >= 2) {
         let results = params.results;
-        let previousMatrix = currentIteration===1 ? params.originalMatrix : results[currentIteration - 2].finalMatrix;
-        let previousOutput = currentIteration===1 ? params.originalOutput : results[currentIteration - 2].finalOutput;
+        let previousMatrix = currentIteration === 1 ? params.originalMatrix : results[currentIteration - 2].finalMatrix;
+        let previousOutput = currentIteration === 1 ? params.originalOutput : results[currentIteration - 2].finalOutput;
         let currentResult = results[currentIteration - 1];
         latexContent = String.raw`
         \displaystyle
@@ -432,8 +428,8 @@ function Steps({smallScreen, params}) {
         }
         latexContent += String.raw`\\ \begin{array}{lcl} `;
         const boldRows = currentResult.interchange ? [currentResult.row, currentResult.row2] : [currentResult.row, currentResult.pivot];
-        const finalLatex= String.raw`\overbrace{${matrixToLatex(currentResult.finalMatrix, {leftBracketOnly:true, boldRows: boldRows})}}^{A}
-        \overbrace{${matrixToLatex(currentResult.finalOutput, {single:true, rightBracketOnly:true, boldRows: boldRows})}}^{B}`;
+        const finalLatex = String.raw`\overbrace{${matrixToLatex(currentResult.finalMatrix, { leftBracketOnly: true, boldRows: boldRows })}}^{A}
+        \overbrace{${matrixToLatex(currentResult.finalOutput, { single: true, rightBracketOnly: true, boldRows: boldRows })}}^{B}`;
         if (!currentResult.interchange && currentResult.factor === 0) {
             latexContent += String.raw`
                 \\ \text{The factor is zero, so no elimination is done here.}
@@ -443,11 +439,11 @@ function Steps({smallScreen, params}) {
         }
         else {
             const initialLatex = String.raw`
-            \overbrace{${matrixToLatex(previousMatrix, {leftBracketOnly: true, boldRows: boldRows})}}^{A}
-            \overbrace{${matrixToLatex(previousOutput, {single:true, rightBracketOnly:true, boldRows: boldRows})}}^{B}`;
+            \overbrace{${matrixToLatex(previousMatrix, { leftBracketOnly: true, boldRows: boldRows })}}^{A}
+            \overbrace{${matrixToLatex(previousOutput, { single: true, rightBracketOnly: true, boldRows: boldRows })}}^{B}`;
             const operationLatex = currentResult.interchange ?
-            String.raw`R_{${currentResult.row}} \leftrightarrow R_{${currentResult.row2}}`
-            : String.raw`R_{${currentResult.row}} = R_{${currentResult.row}}-${formatMatrixLatex(currentResult.factor)}R_{${currentResult.pivot}}`;
+                String.raw`R_{${currentResult.row}} \leftrightarrow R_{${currentResult.row2}}`
+                : String.raw`R_{${currentResult.row}} = R_{${currentResult.row}}-${formatMatrixLatex(currentResult.factor)}R_{${currentResult.pivot}}`;
             if (smallScreen) {
                 latexContent += String.raw`
                 \\ ${initialLatex}
@@ -474,12 +470,12 @@ function Steps({smallScreen, params}) {
         \displaystyle
         \begin{array}{l}
         \\ \text{Cannot do any elimination.}
-        \\ \overbrace{${matrixToLatex(params.originalMatrix, {leftBracketOnly: true})}}^{A}
-            \overbrace{${matrixToLatex(params.originalOutput, {single:true, rightBracketOnly:true})}}^{B}
+        \\ \overbrace{${matrixToLatex(params.originalMatrix, { leftBracketOnly: true })}}^{A}
+            \overbrace{${matrixToLatex(params.originalOutput, { single: true, rightBracketOnly: true })}}^{B}
         \end{array}
         `;
     }
-    
+
     return (
         <Container className={styleClasses.container}>
             <Grid container direction="column" alignItems="center" justify="flex-start">
@@ -488,13 +484,13 @@ function Steps({smallScreen, params}) {
                         <Box id="iteration-slider" width="70vw">
                             <Slider
                                 orientation="horizontal"
-                                onChangeCommitted={(event, value) => {setCurrentIteration(value)}}
+                                onChangeCommitted={(event, value) => { setCurrentIteration(value) }}
                                 defaultValue={1}
                                 aria-labelledby="discrete-slider-small-steps"
                                 step={1}
                                 marks
                                 min={1}
-                                max={params.iterations<=0 ? 1 :params.iterations}
+                                max={params.iterations <= 0 ? 1 : params.iterations}
                                 valueLabelDisplay="on"
                             />
                         </Box>

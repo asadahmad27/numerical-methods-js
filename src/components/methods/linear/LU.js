@@ -1,6 +1,6 @@
-import {formatLatex, formatMatrixLatex} from "../../utils";
-import {initialMatrix4 as initialMatrix, generateGridCallback, createNewColumn, createNewRow, gridTo2DArray, cloneArray, matrixToLatex} from "../../matrix_utils";
-import React, {useState, useEffect} from "react";
+import { formatLatex, formatMatrixLatex } from "../../utils";
+import { initialMatrix4 as initialMatrix, generateGridCallback, createNewColumn, createNewRow, gridTo2DArray, cloneArray, matrixToLatex } from "../../matrix_utils";
+import React, { useState, useEffect } from "react";
 import Header from "../../header/Header";
 
 import { identity, multiply } from 'mathjs';
@@ -22,7 +22,7 @@ import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fab from '@material-ui/core/Fab';
 import HelpIcon from '@material-ui/icons/Help';
-import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps} from "react-joyride";
+import Joyride, { Step as JoyrideStep, CallBackProps as JoyrideCallBackProps } from "react-joyride";
 import Collapse from '@material-ui/core/Collapse';
 import { Fade, Zoom, Slide } from "react-awesome-reveal";
 import { useTheme } from '@material-ui/core/styles';
@@ -36,14 +36,14 @@ const TOUR_STEPS: JoyrideStep[] = [
         target: ".matrix-size-input",
         title: "Size",
         content:
-        "Increase/Reduce the matrix's size",
+            "Increase/Reduce the matrix's size",
         disableBeacon: true,
     },
     {
         target: ".matrix-input",
         title: "Matrix",
         content:
-        "Specify the matrix here.",
+            "Specify the matrix here.",
     },
     {
         target: ".step-math",
@@ -100,11 +100,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function LinearLU({methodName, markdown}) {
+function LinearLU({ methodName, markdown }) {
     useEffect(() => {
         // Set webpage title
         document.title = methodName;
-        
+
     });
 
     const styleClasses = useStyles();
@@ -137,7 +137,7 @@ function LinearLU({methodName, markdown}) {
                 }
                 columns.pop();
             }
-            setGridState({columns, rows});
+            setGridState({ columns, rows });
         };
     }
 
@@ -149,10 +149,10 @@ function LinearLU({methodName, markdown}) {
     let results = [];
     let lowerMatrix = identity(matrixSize, matrixSize).toArray();
     let pivotLength = matrixSize;
-    
-    for (let pivot  = 0; pivot < pivotLength - 1; pivot++) {
+
+    for (let pivot = 0; pivot < pivotLength - 1; pivot++) {
         let validPivot = true;
-        if (modifiedMatrix[pivot][pivot] === 0 ) {
+        if (modifiedMatrix[pivot][pivot] === 0) {
             validPivot = false;
             for (let row2 = pivot + 1; row2 < pivotLength; row2++) {
                 if (modifiedMatrix[row2][pivot] !== 0) {
@@ -172,7 +172,7 @@ function LinearLU({methodName, markdown}) {
             }
         }
         if (validPivot) {
-            for (let row  = pivot + 1; row < pivotLength; row++) {
+            for (let row = pivot + 1; row < pivotLength; row++) {
                 let factor = modifiedMatrix[row][pivot] / modifiedMatrix[pivot][pivot];
                 lowerMatrix[row][pivot] = factor;
                 let divisionByZero = false;
@@ -183,7 +183,7 @@ function LinearLU({methodName, markdown}) {
                     continue;
                 }
                 if (!divisionByZero) {
-                    for (let col  = 0; col < matrixSize; col++) {
+                    for (let col = 0; col < matrixSize; col++) {
                         modifiedMatrix[row][col] -= factor * modifiedMatrix[pivot][col];
                     }
                 }
@@ -210,86 +210,82 @@ function LinearLU({methodName, markdown}) {
         }
     };
 
-    let params = {originalMatrix, matrixSize, iterations, results, lowerMatrix};
-    
+    let params = { originalMatrix, matrixSize, iterations, results, lowerMatrix };
+
     return (
         <>
             <Header methodName={methodName} markdown={markdown} />
             <Paper className={styleClasses.paper}>
                 <Container className={styleClasses.container}>
-                <Zoom duration={500} triggerOnce cascade>
-                    <Typography variant="body1">
-                        
-                    </Typography>
-                    <Grid container spacing={1} direction="row" alignItems="center" justify="center">
-                        <Grid xs item>
-                            <Card className={styleClasses.card}>
-                                <CardContent className={styleClasses.cardContent}>
-                                    <Grid container spacing={1} direction="column" alignItems="center" justify="center">
-                                        <Grid xs item className="matrix-size-input" container spacing={1} direction="row" alignItems="center" justify="center">
-                                            <Typography variant="h6">
-                                                Size:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            </Typography>
-                                            <IconButton variant="contained" color="primary" onClick={sizeCallback(false)} >
-                                                <RemoveCircleOutlineOutlinedIcon color="error" />
-                                            </IconButton>
-                                            <IconButton variant="contained" color="primary" onClick={sizeCallback(true)} >
-                                                <AddCircleOutlineOutlinedIcon />
-                                            </IconButton>
-                                        </Grid>
-                                        <Grid xs item className="matrix-input" container spacing={1} direction="column" alignItems="center" justify="center">
-                                            <Grid xs item>
+                    <Zoom duration={500} triggerOnce cascade>
+                        <Typography variant="body1">
+
+                        </Typography>
+                        <Grid container spacing={1} direction="row" alignItems="center" justify="center">
+                            <Grid xs item>
+                                <Card className={styleClasses.card}>
+                                    <CardContent className={styleClasses.cardContent}>
+                                        <Grid container spacing={1} direction="column" alignItems="center" justify="center">
+                                            <Grid xs item className="matrix-size-input" container spacing={1} direction="row" alignItems="center" justify="center">
                                                 <Typography variant="h6">
-                                                    Matrix:
+                                                    Size:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 </Typography>
+                                                <IconButton variant="contained" color="primary" onClick={sizeCallback(false)} >
+                                                    <RemoveCircleOutlineOutlinedIcon color="error" />
+                                                </IconButton>
+                                                <IconButton variant="contained" color="primary" onClick={sizeCallback(true)} >
+                                                    <AddCircleOutlineOutlinedIcon />
+                                                </IconButton>
                                             </Grid>
-                                            <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
-                                                <Grid key={Math.random()} item className={styleClasses.overflow}>
-                                                    <ReactDataGrid
-                                                        columns={gridState.columns}
-                                                        rowGetter={i => gridState.rows[i]}
-                                                        rowsCount={gridState.rows.length}
-                                                        onGridRowsUpdated={generateGridCallback(gridState, setGridState)}
-                                                        enableCellSelect={true}
-                                                        headerRowHeight={1}
-                                                        minColumnWidth={columnWidth}
-                                                        minWidth={columnWidth * gridState.columns.length + widthPadding}
-                                                        rowHeight={rowHeight}
-                                                        minHeight={rowHeight * gridState.rows.length + heightPadding}
-                                                    />
+                                            <Grid xs item className="matrix-input" container spacing={1} direction="column" alignItems="center" justify="center">
+                                                <Grid xs item>
+                                                    <Typography variant="h6">
+                                                        Matrix:
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid xs item container spacing={0} direction="row" alignItems="center" justify="center">
+                                                    <Grid key={Math.random()} item className={styleClasses.overflow}>
+                                                        <ReactDataGrid
+                                                            columns={gridState.columns}
+                                                            rowGetter={i => gridState.rows[i]}
+                                                            rowsCount={gridState.rows.length}
+                                                            onGridRowsUpdated={generateGridCallback(gridState, setGridState)}
+                                                            enableCellSelect={true}
+                                                            headerRowHeight={1}
+                                                            minColumnWidth={columnWidth}
+                                                            minWidth={columnWidth * gridState.columns.length + widthPadding}
+                                                            rowHeight={rowHeight}
+                                                            minHeight={rowHeight * gridState.rows.length + heightPadding}
+                                                        />
+                                                    </Grid>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                    </Grid>                                    
-                                </CardContent>
-                            </Card>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Zoom>
+                    </Zoom>
                 </Container>
             </Paper>
 
             <Divider />
-            
+
             <Collapse in={solve}>
                 <Fade triggerOnce>
                     <Paper className={styleClasses.paper}>
-                        {solve && <Steps smallScreen={smallScreen} params={params}/>}
+                        {solve && <Steps smallScreen={smallScreen} params={params} />}
                     </Paper>
                 </Fade>
             </Collapse>
-            <Tooltip arrow title="Help" placement="top">
-                <Fab color="secondary" aria-label="help" className={styleClasses.fab} onClick={openHelp}>
-                    <HelpIcon />
-                </Fab>
-            </Tooltip>
+            {""}
             <Joyride
-                scrollToFirstStep 
+                scrollToFirstStep
                 run={runTour}
                 steps={TOUR_STEPS}
                 continuous={true}
                 showSkipButton={true}
-                    locale={{
+                locale={{
                     last: "End tour",
                 }}
                 callback={joyrideCallback}
@@ -298,7 +294,7 @@ function LinearLU({methodName, markdown}) {
     );
 }
 
-function Steps({smallScreen, params}) {
+function Steps({ smallScreen, params }) {
 
     const styleClasses = useStyles();
 
@@ -313,7 +309,7 @@ function Steps({smallScreen, params}) {
     }
     else if (params.iterations >= 2) {
         let results = params.results;
-        let previousMatrix = currentIteration===1 ? params.originalMatrix : results[currentIteration - 2].finalMatrix;
+        let previousMatrix = currentIteration === 1 ? params.originalMatrix : results[currentIteration - 2].finalMatrix;
         let currentResult = results[currentIteration - 1];
         latexContent = String.raw`
         \displaystyle
@@ -329,7 +325,7 @@ function Steps({smallScreen, params}) {
         }
         latexContent += String.raw`\\ \begin{array}{lcl} `;
         const boldRows = currentResult.interchange ? [currentResult.row, currentResult.row2] : [currentResult.row, currentResult.pivot];
-        const finalLatex= String.raw`\overbrace{${matrixToLatex(currentResult.finalMatrix, {boldRows: boldRows})}}^{U}`;
+        const finalLatex = String.raw`\overbrace{${matrixToLatex(currentResult.finalMatrix, { boldRows: boldRows })}}^{U}`;
         if (!currentResult.interchange && currentResult.factor === 0) {
             latexContent += String.raw`
                 \\ \text{The factor is zero, so no elimination is done here.}
@@ -339,10 +335,10 @@ function Steps({smallScreen, params}) {
         }
         else {
             const initialLatex = String.raw`
-            \overbrace{${matrixToLatex(previousMatrix, {boldRows: boldRows})}}^{U}`;
+            \overbrace{${matrixToLatex(previousMatrix, { boldRows: boldRows })}}^{U}`;
             const operationLatex = currentResult.interchange ?
-            String.raw`R_{${currentResult.row}} \leftrightarrow R_{${currentResult.row2}}`
-            : String.raw`R_{${currentResult.row}} = R_{${currentResult.row}}-${formatMatrixLatex(currentResult.factor)}R_{${currentResult.pivot}}`;
+                String.raw`R_{${currentResult.row}} \leftrightarrow R_{${currentResult.row2}}`
+                : String.raw`R_{${currentResult.row}} = R_{${currentResult.row}}-${formatMatrixLatex(currentResult.factor)}R_{${currentResult.pivot}}`;
             if (smallScreen) {
                 latexContent += String.raw`
                 \\ ${initialLatex}
@@ -368,7 +364,7 @@ function Steps({smallScreen, params}) {
             for (let i = 0; i < params.matrixSize; i++) {
                 for (let j = 0; j < params.matrixSize; j++) {
                     if (j < i) {
-                        
+
                         lowerFormulaLatex += String.raw` \bf{f_{${i + 1}${j + 1}}} `;
                     }
                     else if (j === i) {
@@ -435,7 +431,7 @@ function Steps({smallScreen, params}) {
         \end{array}
         `;
     }
-    
+
     return (
         <Container className={styleClasses.container}>
             <Grid container direction="column" alignItems="center" justify="flex-start">
@@ -444,13 +440,13 @@ function Steps({smallScreen, params}) {
                         <Box id="iteration-slider" width="70vw">
                             <Slider
                                 orientation="horizontal"
-                                onChangeCommitted={(event, value) => {setCurrentIteration(value)}}
+                                onChangeCommitted={(event, value) => { setCurrentIteration(value) }}
                                 defaultValue={1}
                                 aria-labelledby="discrete-slider-small-steps"
                                 step={1}
                                 marks
                                 min={1}
-                                max={params.iterations<=0 ? 1 :params.iterations}
+                                max={params.iterations <= 0 ? 1 : params.iterations}
                                 valueLabelDisplay="on"
                             />
                         </Box>

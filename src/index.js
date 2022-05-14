@@ -2,20 +2,19 @@ import reportWebVitals from './reportWebVitals';
 import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import {HashRouter as Router} from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 import { Fade } from "react-awesome-reveal";
 import Puff from './svg/puff.svg';
 const App = lazy(() => import('./App'));
 
 if (process.env.NODE_ENV !== 'development') {
-  console.log = () => {}
+  console.log = () => { }
 }
 
 const suspenseLoader = (
   <Fade>
     <div className="suspenseLoader">
-      <img alt=" " src={Puff} height="125" width="125"/>
-      <p>Wait ahh...</p>
+      <img alt=" " src={Puff} height="125" width="125" />
     </div>
   </Fade>
 );
