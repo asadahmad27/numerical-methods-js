@@ -11,7 +11,7 @@ import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-function Category({category}) {
+function Category({ category }) {
 
     const [open, setOpen] = React.useState(false);
 
@@ -20,22 +20,20 @@ function Category({category}) {
     };
     return (
         <>
-        <ListItem button onClick={handleClick}>
-            <ListItemIcon>
-                <DoubleArrowIcon />
-            </ListItemIcon>
-            <ListItemText primary={<Box fontWeight="fontWeightBold">{category.name}</Box>} primaryTypographyProps={{'variant':'button'}}/>
-            {open ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-                {
-                    category.methods.map((method, i) => (
-                        <MethodType key = {i} categoryPath={category.path} method={method} />
-                    ))
-                }
-            </List>
-        </Collapse>
+            <ListItem button onClick={handleClick}>
+
+                <ListItemText primary={<Box fontWeight="fontWeightBold">{category.name}</Box>} primaryTypographyProps={{ 'variant': 'button' }} />
+                {open ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={true} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                    {
+                        category.methods.map((method, i) => (
+                            <MethodType key={i} categoryPath={category.path} method={method} />
+                        ))
+                    }
+                </List>
+            </Collapse>
         </>
     );
 }

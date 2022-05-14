@@ -1,7 +1,7 @@
 import Header from "../header/Header";
 import Category from "./Category";
 import categories from "../../constants/categories";
-import {React, useEffect} from "react";
+import { React, useEffect } from "react";
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
@@ -42,38 +42,38 @@ const useStyles = makeStyles((theme) => ({
 
 function Menu() {
   useEffect(() => {
-      // Set webpage title
-      document.title = "Numerical Methods Web Demo";
+    // Set webpage title
+    document.title = "Numerical Methods Web Demo";
   });
 
   const styleClasses = useStyles();
 
   return (
-      <>
-        <Header methodName = {""} />
-        <Box mt={"1em"}>
-          <Typography variant="body1">
-          <br/>
-            Note: Functions such as <TeX math={String.raw`e^{x}, sin x`} /> and  <TeX math={String.raw`cos x`} /> should include brackets.
-          <br/>
+    <>
+      <Header methodName={""} />
+      <Box mt={"1em"}>
+        <Typography variant="body1">
+          <br />
+          Note: Functions such as <TeX math={String.raw`e^{x}, sin x`} /> and  <TeX math={String.raw`cos x`} /> should include brackets.
+          <br />
           For instance, <TeX math={String.raw`e^{(x)}, sin (x)`} /> and  <TeX math={String.raw`cos (x)`} />.
-          </Typography>
-          <Zoom duration={500} triggerOnce>
+        </Typography>
+        <Zoom duration={500} triggerOnce>
           <Grid container spacing={1}>
-          {
-            categories.map((category, i) => (
-              <Grid key={i} item xs={12} sm={6} md={4} lg={4} xl={4}>
-                <Paper className={styleClasses.paper}>
-                  <Category category={category} methods={category.methods} />
-                </Paper>
-              </Grid>
-            ))
-          }
+            {
+              categories.map((category, i) => (
+                <Grid key={i} item xs={12} sm={6} md={4} lg={4} xl={4}>
+                  <Paper className={styleClasses.paper}>
+                    <Category category={category} methods={category.methods} />
+                  </Paper>
+                </Grid>
+              ))
+            }
           </Grid>
-          </Zoom>
-        </Box>
-      </>
-      
+        </Zoom>
+      </Box>
+    </>
+
   );
 }
 
