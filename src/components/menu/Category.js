@@ -22,8 +22,8 @@ function Category({ category }) {
         <>
             <ListItem button onClick={handleClick}>
 
-                <ListItemText primary={<Box fontWeight="fontWeightBold">{category.name}</Box>} primaryTypographyProps={{ 'variant': 'button' }} />
-                {open ? <ExpandLess /> : <ExpandMore />}
+                {/* <ListItemText primary={<Box fontWeight="fontWeightBold">{category.name}</Box>} primaryTypographyProps={{ 'variant': 'button' }} /> */}
+
             </ListItem>
             <Collapse in={true} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>

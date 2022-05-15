@@ -64,13 +64,6 @@ const categories = [
                 completed: true,
                 markdown: NonlinearSecantMarkdown,
             },
-        ]
-    },
-    {
-        name: "Linear Equations",
-        path: "linear",
-        methods: [
-
             {
                 name: "Jacobi / Gauss-Seidel Iteration",
                 path: "jacobi_seidel",
@@ -78,13 +71,6 @@ const categories = [
                 completed: true,
                 markdown: LinearJacobiSeidelMarkdown,
             },
-
-        ]
-    },
-    {
-        name: "Numerical Differentiation",
-        path: "differential",
-        methods: [
             {
                 name: "Finite Difference",
                 path: "finite",
@@ -92,14 +78,6 @@ const categories = [
                 completed: true,
                 markdown: DiffFiniteMarkdown,
             },
-
-        ]
-    },
-    {
-        name: "Numerical Integration",
-        path: "integral",
-        methods: [
-
             {
                 name: "Trapezoidal",
                 path: "trapezoidal",
@@ -114,12 +92,6 @@ const categories = [
                 completed: true,
                 markdown: IntegralSimpsonMarkdown,
             },
-        ]
-    },
-    {
-        name: "Ordinary Differential Equations",
-        path: "ode",
-        methods: [
             {
                 name: "Euler's Method",
                 path: "euler",
@@ -141,9 +113,11 @@ const categories = [
                 completed: true,
                 markdown: OdeRungeMarkdown,
             },
-
         ]
     },
+
+
+
 
 ]
 

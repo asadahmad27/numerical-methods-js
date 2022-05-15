@@ -40,7 +40,7 @@ function App() {
               {
                 categories?.map((category, i) => (
                   category?.methods.map((method, j) => (
-                    <Route key={i + j} exact path={generatePath(category.path, method.path)}
+                    <Route key={i + j} exact path={generatePath('allMethods', method.path)}
                       component={
                         () => <method.component methodName={method.name} markdown={method.markdown} />
                       } />

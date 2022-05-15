@@ -1,4 +1,4 @@
-import {generatePath} from "../utils";
+import { generatePath } from "../utils";
 import React from "react";
 import { Link } from "react-router-dom";
 import Box from '@material-ui/core/Box';
@@ -14,27 +14,23 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
     listItem: {
         paddingLeft: theme.spacing(4),
-        transition: 'transform 0.2s',
-        "&:hover": {
-            '-ms-transform': 'scale(1.2)', /* IE 9 */
-            '-webkit-transform': 'scale(1.2)', /* Safari 3-8 */
-            'transform': 'scale(1.2)',
-        },
+
+
     },
 }));
 
-function MethodType({categoryPath, method}) {
+function MethodType({ method }) {
     const styleClasses = useStyles();
 
     return (
-        <ListItem divider component={Link} button={true} to={generatePath(categoryPath, method.path)} className={styleClasses.listItem}>
+        <ListItem divider component={Link} button={true} to={generatePath('allMethods', method.path)} className={styleClasses.listItem}>
             <ListItemIcon>
-            {method.completed?
-            <CheckCircleOutlineOutlinedIcon style={{ color: green[500] }}/>
-            :
-            <CancelOutlinedIcon style={{ color: red[500] }}/>}
+                {method.completed ?
+                    <CheckCircleOutlineOutlinedIcon style={{ color: green[500] }} />
+                    :
+                    <CancelOutlinedIcon style={{ color: red[500] }} />}
             </ListItemIcon>
-            <ListItemText primary={<Box fontWeight="fontWeightBold">{method.name}</Box>} primaryTypographyProps={{variant:'button'}}/>
+            <ListItemText primary={<Box fontWeight="fontWeightBold">{method.name}</Box>} primaryTypographyProps={{ variant: 'button' }} />
         </ListItem>
     );
 }
