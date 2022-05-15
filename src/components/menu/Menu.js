@@ -50,10 +50,10 @@ function Menu() {
       <Box mt={"1em"}>
 
         <Zoom duration={500} triggerOnce>
-          <Grid container spacing={1}>
+          <Grid container spacing={1} style={{ justifyContent: "center" }}>
             {
               categories.map((category, i) => (
-                <Grid key={i} item xs={6} sm={12} md={12} lg={12} xl={12}>
+                <Grid key={i} item xs={8} sm={8} md={8} lg={8} xl={8}>
                   <Paper className={styleClasses.paper}>
                     <Category category={category} methods={category.methods} />
                   </Paper>

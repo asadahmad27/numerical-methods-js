@@ -1,22 +1,19 @@
-import styles from './Header.module.css';
-import { generatePath } from "../utils";
+
 import categories from "../../constants/categories";
-import MethodInfo from '../MethodInfo';
+
 import React from "react";
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import Box from '@material-ui/core/Box';
+
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-
-import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import Slide from '@material-ui/core/Slide';
-import Tooltip from '@material-ui/core/Tooltip';
+
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -32,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
+        color: "gray"
     },
     homeButton: {
         marginRight: theme.spacing(0),
@@ -137,7 +135,7 @@ function Header({ methodName, markdown }) {
             <AppBar>
                 <Toolbar>
                     <Fade>
-                        <Typography variant={smallScreen ? "subtitle1" : "h6"} className={styleClasses.title} noWrap={!smallScreen}>
+                        <Typography color={'white'} variant={smallScreen ? "subtitle1" : "h6"} className={styleClasses.title} noWrap={!smallScreen}>
                             {title}
                         </Typography>
                     </Fade>

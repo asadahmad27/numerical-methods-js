@@ -10,6 +10,8 @@ import Collapse from '@material-ui/core/Collapse';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import { generatePath } from "../utils";
+import { Link } from "react-router-dom";
 
 function Category({ category }) {
 
@@ -25,7 +27,8 @@ function Category({ category }) {
                 {/* <ListItemText primary={<Box fontWeight="fontWeightBold">{category.name}</Box>} primaryTypographyProps={{ 'variant': 'button' }} /> */}
 
             </ListItem>
-            <Collapse in={true} timeout="auto" unmountOnExit>
+
+            <Collapse in={true} timeout="auto" unmountOnExit style={{ textAlign: "center" }}>
                 <List component="div" disablePadding>
                     {
                         category.methods.map((method, i) => (
