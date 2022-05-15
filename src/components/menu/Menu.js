@@ -47,7 +47,7 @@ function Menu() {
   return (
     <>
       <Header methodName={""} />
-      <Box mt={"1em"} sx={{ display: "flex", justifyContent: "center" }}>
+      <Box mt={"1em"}>
 
         <Zoom duration={500} triggerOnce>
           <Grid container spacing={1}>
