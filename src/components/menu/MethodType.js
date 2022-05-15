@@ -24,12 +24,7 @@ function MethodType({ method }) {
 
     return (
         <ListItem divider component={Link} button={true} to={generatePath('allMethods', method.path)} className={styleClasses.listItem}>
-            <ListItemIcon>
-                {method.completed ?
-                    <CheckCircleOutlineOutlinedIcon style={{ color: green[500] }} />
-                    :
-                    <CancelOutlinedIcon style={{ color: red[500] }} />}
-            </ListItemIcon>
+
             <ListItemText primary={<Box fontWeight="fontWeightBold">{method.name}</Box>} primaryTypographyProps={{ variant: 'button' }} />
         </ListItem>
     );

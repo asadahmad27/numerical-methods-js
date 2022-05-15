@@ -9,7 +9,7 @@ import { generatePath } from "./components/utils";
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
-
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import {
   Switch,
@@ -23,12 +23,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#e0e0e0'
+    }
+  }
+});
 function App() {
 
   const styleClasses = useStyles();
 
   return (
-    <div className={styles.App}>
+
+    <MuiThemeProvider theme={theme}>
+
       <CssBaseline />
       <Container>
         <div className={styleClasses.root}>
@@ -52,7 +61,7 @@ function App() {
           </ErrorBoundary>
         </div>
       </Container>
-    </div>
+    </MuiThemeProvider>
   );
 }
 

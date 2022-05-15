@@ -8,11 +8,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Box from '@material-ui/core/Box';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -26,12 +21,7 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
 import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
-import GitHubIcon from '@material-ui/icons/GitHub';
-import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
-import SearchIcon from '@material-ui/icons/Search';
-import ArrowDropDownCircleIcon from '@material-ui/icons/ArrowDropDownCircle';
-import { useHistory } from "react-router-dom";
 
 import { Link } from "react-router-dom";
 import { Fade } from "react-awesome-reveal";
@@ -144,25 +134,15 @@ function Header({ methodName, markdown }) {
 
     return (
         <div className={styleClasses.root}>
-            <HideOnScroll>
-                <AppBar>
-                    <Toolbar>
-
-                        <Tooltip arrow title="Home" placement="bottom">
-                            <IconButton component={Link} to={'/'} edge="start" className={styleClasses.homeButton} color="inherit" aria-label="Home">
-                                <HomeIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Fade>
-                            <Typography variant={smallScreen ? "subtitle1" : "h6"} className={styleClasses.title} noWrap={!smallScreen}>
-                                {title}
-                            </Typography>
-                        </Fade>
-
-
-                    </Toolbar>
-                </AppBar>
-            </HideOnScroll>
+            <AppBar>
+                <Toolbar>
+                    <Fade>
+                        <Typography variant={smallScreen ? "subtitle1" : "h6"} className={styleClasses.title} noWrap={!smallScreen}>
+                            {title}
+                        </Typography>
+                    </Fade>
+                </Toolbar>
+            </AppBar>
             <Toolbar />
         </div>
     );
