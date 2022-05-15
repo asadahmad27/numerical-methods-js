@@ -147,11 +147,7 @@ function Header({ methodName, markdown }) {
             <HideOnScroll>
                 <AppBar>
                     <Toolbar>
-                        <Tooltip arrow title="GitHub" placement="bottom">
-                            <IconButton rel="noopener noreferrer" href="" target="_blank" edge="start" className={styleClasses.githubButton} color="inherit" aria-label="GitHub">
-                                <GitHubIcon />
-                            </IconButton>
-                        </Tooltip>
+
                         <Tooltip arrow title="Home" placement="bottom">
                             <IconButton component={Link} to={'/'} edge="start" className={styleClasses.homeButton} color="inherit" aria-label="Home">
                                 <HomeIcon />
