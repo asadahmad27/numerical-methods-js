@@ -445,9 +445,7 @@ function Steps({ params }) {
                         </Grid>
                     </Grid>
                     <Grid xs item className="graph-button">
-                        <Slide direction="right" triggerOnce>
-                            <Graph params={{ currentIteration, graphCallback, smallScreen, ...params }} />
-                        </Slide>
+
                     </Grid>
                 </Grid>
 
